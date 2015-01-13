@@ -181,7 +181,7 @@ If the value is a valid email.
 
 If the value is an integer, including integers within strings. 1 and '1' are both classed as integers.
 
-### ip
+#### ip
 
 If the value is a valid IP address.
 
