@@ -14,6 +14,7 @@ class Validator
     public $ruleMessages = [
         'required' => '%s is required',
         'int' => '%s must be a number',
+        'ip' => '%s must be a valid IP address',
         'bool' => '%s must be true/false',
         'alpha' => '%s must be letters only',
         'alphaDash' => '%s must be letters, with - and _ permitted.',
