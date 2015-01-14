@@ -193,10 +193,6 @@ If the value is a valid IP address.
 
 If the value is present.
 
-#### zip
-
-If the value is a valid ZIP code.
-
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.

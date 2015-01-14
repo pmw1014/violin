@@ -23,7 +23,6 @@ class Validator
         'alnumDash' => '%s must be letters and numbers, with - and _ permitted.',
         'email' => '%s must be a valid email address.',
         'activeUrl' => '%s must be an active URL.',
-        'zip' => '%s must be a valid ZIP code.',
     ];
 
     /**
