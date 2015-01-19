@@ -14,11 +14,12 @@ class Validator
     public $ruleMessages = [
         'required' => '%s is required',
         'int' => '%s must be a number',
-        'ip' => '%s must be a valid IP address',
+        'ip' => '%s must be a valid IP address.',
         'bool' => '%s must be true/false',
         'alpha' => '%s must be letters only',
         'alphaDash' => '%s must be letters, with - and _ permitted.',
         'alnum' => '%s must be letters and numbers only.',
+        'array' => '%s must be an array',
         'alnumDash' => '%s must be letters and numbers, with - and _ permitted.',
         'email' => '%s must be a valid email address.',
         'activeUrl' => '%s must be an active URL.',

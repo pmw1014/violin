@@ -169,6 +169,10 @@ If the value is alphabetic letters only.
 
 If the value is alphabetic letters only. Dashes and underscores are permitted.
 
+#### array
+
+If the value is an array.
+
 #### bool
 
 If the value is a boolean.
