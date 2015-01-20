@@ -25,7 +25,18 @@ class Violin extends Validator
 
             // Loop each requested rule
             foreach ($fieldRules as $rule) {
-                $this->$rule($name, $value);
+                $callWithParameters = $this->ruleNeedsCallWithParameters($rule);
+
+                if (!$callWithParameters) {
+                    $this->$rule($name, $value);
+                    continue;
+                }
+
+                // Deal with rules that have parameters
+                $ruleName = $this->getRuleNameForParametarizedRule($rule);
+                $parameters = $this->getParametersArrayForRule($rule);
+
+                $this->$ruleName($name, $value, $parameters);
             }
         }
     }
