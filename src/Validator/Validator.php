@@ -2,6 +2,8 @@
 
 namespace Violin\Validator;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Violin\Rules\All;
 
 class Validator
@@ -23,6 +25,7 @@ class Validator
         'alnumDash' => '%s must be letters and numbers, with - and _ permitted.',
         'email' => '%s must be a valid email address.',
         'activeUrl' => '%s must be an active URL.',
+        'max' => '%s is %s but cannot be more than %s',
     ];
 
     /**
@@ -95,6 +98,10 @@ class Validator
      */
     protected function callAndValidate($rule, $toCall, $args)
     {
+        // Flatten args to pass them correctly to the run method.
+        $args = iterator_to_array(new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($args)), FALSE);
+
         $valid = call_user_func_array($toCall, $args);
 
         if (!$valid && $valid !== null) {
@@ -211,5 +218,45 @@ class Validator
     public function addFieldMessages(array $messages)
     {
         $this->fieldMessages = $messages;
+    }
+
+    /**
+     * Checks if rule name contains arguments part
+     *
+     * @param $name
+     * @return bool
+     */
+    protected function ruleNeedsCallWithParameters($name)
+    {
+        return (bool)preg_match("/.+\([a-zA-Z0-9,'\" _]+\)/", $name);
+    }
+
+    /**
+     * Gets array of parameters which needs to be apply.
+     *
+     * @param $rule
+     * @return array|mixed|string
+     */
+    protected function getParametersArrayForRule($rule)
+    {
+        list($ruleName, $parametersWithBracketAtTheEnd) = explode('(', $rule);
+
+        $parameters = rtrim($parametersWithBracketAtTheEnd, ')');
+        $parameters = preg_replace('/\s+/', '', $parameters);
+        $parameters = explode(',', $parameters);
+
+        return $parameters;
+    }
+
+    /**
+     * Get the name of the rule which has parameters.
+     *
+     * @param $rule
+     * @return mixed
+     */
+    protected function getRuleNameForParametarizedRule($rule)
+    {
+        return explode('(', $rule)[0];
+
     }
 }

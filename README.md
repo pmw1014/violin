@@ -193,6 +193,10 @@ If the value is a valid IP address.
 
 If the value is present.
 
+### max(int)
+
+Rule with parameter. Checks if the value is less or equals than parameter.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
