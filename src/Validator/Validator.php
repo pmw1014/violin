@@ -27,6 +27,7 @@ class Validator
         'activeUrl' => '%s must be an active URL.',
         'max'       => '%s is %s but cannot be more than %s',
         'min'       => '%s is %s but cannot be less than %s',
+        'url'       => '%s must be a valid url',
     ];
 
     /**
