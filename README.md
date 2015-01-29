@@ -197,6 +197,10 @@ If the value is present.
 
 Rule with parameter. Checks if the value is less or equals than parameter.
 
+### min(int)
+
+Rule with parameter. Checks if the value is greater or equals than parameter.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
