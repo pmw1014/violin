@@ -189,13 +189,21 @@ If the value is an integer, including integers within strings. 1 and '1' are bot
 
 If the value is a valid IP address.
 
+#### max(int)
+
+Rule with parameter. Checks if the value is less or equals than parameter.
+
+#### min(int)
+
+Rule with parameter. Checks if the value is greater or equals than parameter.
+
 #### required
 
 If the value is present.
 
-### max(int)
+#### url
 
-Rule with parameter. Checks if the value is less or equals than parameter.
+If the value is a valid URL.
 
 ## Contributing
 
