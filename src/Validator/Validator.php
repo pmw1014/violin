@@ -156,7 +156,14 @@ class Validator
      */
     public function error($messageKey, $args)
     {
+        // Extract the field name from the arguments.
         $field = $args[0];
+
+        $this->errors[$field]['args'] = $args;
+
+        if (!array_key_exists('errors', $this->errors[$field])) {
+            $this->errors[$field]['errors'] = [];
+        }
 
         // If a field message has been set, we use this as preference.
         // Otherwise, we use the standard rule messages.
@@ -166,7 +173,7 @@ class Validator
 
         // Extract the message from the ruleMessages array, passing in
         // the arguments to replace %s's if required, and return it.
-        $this->errors[$field][] = vsprintf($message, $args);
+        array_push($this->errors[$field]['errors'], vsprintf($message, $args));
     }
 
     /**
@@ -259,6 +266,5 @@ class Validator
     protected function getRuleNameForParametarizedRule($rule)
     {
         return explode('(', $rule)[0];
-
     }
 }
