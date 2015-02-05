@@ -211,33 +211,5 @@ Please file issues under GitHub, or submit a pull request if you'd like to direc
 
 ## Todo
 
-* Allow parameter based rules. For example:
-
-```php
-$v->validate([
-    'name' => 'billy',
-    'age' => '20'
-], [
-    'name' => 'required',
-    'age' => 'required|int|max:21'
-]);
-```
-
-* Improve error storage so `errors[]` doesn't contain a list of strings, but a list of messages to look up. Rough example:
-
-```php
-protected $errors = [
-    'name' => [ // field
-        'args' => [
-            'FIELD_NAME', 'FIELD_VALUE'
-        ],
-        'errors' => [
-            'required', 'alpha' // errors that have occured
-        ]
-    ]
-];
-```
-
-Then when calling `errors()`, this should collect up errors for that field, build the string and return them.
-
+* Seperately handled message bag for error collecting/output
 * Allow errors to be defined with {field} and {value} rather than %s's for greater flexibility.
