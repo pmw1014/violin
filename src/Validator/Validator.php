@@ -5,6 +5,7 @@ namespace Violin\Validator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use Violin\Rules\All;
+use Violin\Support\MessageBag;
 
 class Validator
 {
@@ -14,21 +15,28 @@ class Validator
      * @var array
      */
     public $ruleMessages = [
-        'required'  => '%s is required',
-        'int'       => '%s must be a number',
-        'ip'        => '%s must be a valid IP address.',
-        'bool'      => '%s must be true/false',
-        'alpha'     => '%s must be letters only',
-        'alphaDash' => '%s must be letters, with - and _ permitted.',
-        'alnum'     => '%s must be letters and numbers only.',
-        'array'     => '%s must be an array',
-        'alnumDash' => '%s must be letters and numbers, with - and _ permitted.',
-        'email'     => '%s must be a valid email address.',
-        'activeUrl' => '%s must be an active URL.',
-        'max'       => '%s is %s but cannot be more than %s',
-        'min'       => '%s is %s but cannot be less than %s',
-        'url'       => '%s must be a valid url',
+        'required'  => '{field} is required',
+        'int'       => '{field} must be a number',
+        'ip'        => '{field} must be a valid IP address.',
+        'bool'      => '{field} must be true/false',
+        'alpha'     => '{field} must be letters only',
+        'alphaDash' => '{field} must be letters, with - and _ permitted.',
+        'alnum'     => '{field} must be letters and numbers only.',
+        'array'     => '{field} must be an array',
+        'alnumDash' => '{field} must be letters and numbers, with - and _ permitted.',
+        'email'     => '{field} must be a valid email address.',
+        'activeUrl' => '{field} must be an active URL.',
+        'max'       => '{field} is {input} but cannot be more than {value}.',
+        'min'       => '{field} is {input} but cannot be less than {value}.',
+        'url'       => '{field} must be a valid url.',
+        'between'   => '{field} must be between [{value}, {value:1}].'
     ];
+
+    /**
+     * Default format for message output.
+     * @var array
+     */
+    public $format = ['{field}', '{input}', '{value}'];
 
     /**
      * All field messages
@@ -138,6 +146,60 @@ class Validator
     }
 
     /**
+     * Replaces the formats defined in the message.
+     *
+     * @param  string $message
+     * @param  array $arguments
+     * @return string
+     */
+    protected function replace($message, $arguments)
+    {
+        if (count($arguments) > 3) {
+            // If the arguments array is bigger than the format
+            // array, then we need to consider that the rule has
+            // multiple paramaters.
+            $format = $this->format;
+
+            for ($i = 2; $i < count($arguments); $i++) {
+                $format[] = '{value:' . ($i - 1) . '}';
+            }
+
+            return str_replace($format, $arguments, $message);
+        }
+
+        return str_replace($this->format, $arguments, $message);
+    }
+
+    /**
+     * Generates all the error messages and returns a MessageBag instance.
+     *
+     * @return Violin\Support\MessageBag
+     */
+    public function messages()
+    {
+        $messages = [];
+
+        foreach ($this->errors as $field => $proprieties) {
+            $messages[$field] = [];
+
+            foreach ($proprieties['errors'] as $messageKey) {
+                // If a field message has been set, we use this as preference.
+                // Otherwise, we use the standard rule messages.
+                $message = isset($this->fieldMessages[$field][$messageKey])
+                    ? $this->fieldMessages[$field][$messageKey]
+                    : $this->ruleMessages[$messageKey];
+
+                // Initiate the replacement of the string.
+                $message = $this->replace($message, $proprieties['args']);
+
+                array_push($messages[$field], $message);
+            }
+        }
+
+        return new MessageBag($messages);
+    }
+
+    /**
      * Gets the list of accumulated errors
      *
      * @return array
@@ -165,15 +227,7 @@ class Validator
             $this->errors[$field]['errors'] = [];
         }
 
-        // If a field message has been set, we use this as preference.
-        // Otherwise, we use the standard rule messages.
-        $message = isset($this->fieldMessages[$field][$messageKey])
-            ? $this->fieldMessages[$field][$messageKey]
-            : $this->ruleMessages[$messageKey];
-
-        // Extract the message from the ruleMessages array, passing in
-        // the arguments to replace %s's if required, and return it.
-        array_push($this->errors[$field]['errors'], vsprintf($message, $args));
+        array_push($this->errors[$field]['errors'], $messageKey);
     }
 
     /**
