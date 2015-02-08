@@ -77,7 +77,9 @@ class MessageBag
         $messages = [];
 
         foreach ($this->messages as $key => $value) {
-            $messages[] = $value;
+            foreach ($value as $message) {
+                $messages[] = $message;
+            }
         }
 
         return $messages;
