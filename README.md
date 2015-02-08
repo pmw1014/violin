@@ -158,6 +158,10 @@ If the value is alphabetic letters only. Dashes and underscores are permitted.
 
 If the value is an array.
 
+### between(int, int)
+
+Checks if the value is within the intervals defined.
+
 #### bool
 
 If the value is a boolean.
