@@ -6,7 +6,7 @@ use Violin\Violin;
 
 $v = new Violin;
 
-$v->addRuleMessage('required', 'You better fill in the %s field, or else.');
+$v->addRuleMessage('required', 'You better fill in the {field} field, or else.');
 
 $v->validate([
     'name' => '',
@@ -19,5 +19,5 @@ $v->validate([
 if($v->valid()) {
     echo 'Valid!';
 } else {
-    echo '<pre>', var_dump($v->errors()), '</pre>';
+    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
 }
