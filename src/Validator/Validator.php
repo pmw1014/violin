@@ -110,7 +110,8 @@ class Validator
     {
         // Flatten args to pass them correctly to the run method.
         $args = iterator_to_array(new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($args)), FALSE);
+            new RecursiveArrayIterator($args)
+        ), false);
 
         $valid = call_user_func_array($toCall, $args);
 

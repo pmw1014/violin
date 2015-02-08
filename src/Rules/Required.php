@@ -13,6 +13,8 @@ class Required
      */
     public function run($name, $value)
     {
-        return !empty(trim($value));
+        $value = trim($value);
+
+        return !empty($value);
     }
 }
