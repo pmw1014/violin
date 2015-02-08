@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class AlnumDash
+class UrlRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class AlnumDash
      */
     public function run($name, $value)
     {
-        return preg_match('/^[\pL\pM\pN_-]+$/u', $value);
+        return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
 }

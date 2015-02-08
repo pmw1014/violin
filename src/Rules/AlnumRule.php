@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Alnum
+class AlnumRule
 {
     /**
      * Run the validation

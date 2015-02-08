@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Url
+class IntRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class Url
      */
     public function run($name, $value)
     {
-        return filter_var($value, FILTER_VALIDATE_URL) !== false;
+        return is_numeric($value) && (int)$value == $value;
     }
 }

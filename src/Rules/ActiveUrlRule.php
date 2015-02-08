@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Required
+class ActiveUrlRule
 {
     /**
      * Run the validation
@@ -13,8 +13,8 @@ class Required
      */
     public function run($name, $value)
     {
-        $value = trim($value);
-
-        return !empty($value);
+        $url = str_replace(array('http://', 'https://', 'ftp://'), '', strtolower($value));
+        
+        return !checkdnsrr($url);
     }
 }

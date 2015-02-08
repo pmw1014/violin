@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Bool
+class AlnumDashRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class Bool
      */
     public function run($name, $value)
     {
-        return is_bool($value);
+        return preg_match('/^[\pL\pM\pN_-]+$/u', $value);
     }
 }

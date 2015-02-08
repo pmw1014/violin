@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Int
+class EmailRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class Int
      */
     public function run($name, $value)
     {
-        return is_numeric($value) && (int)$value == $value;
+        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
     }
 }
