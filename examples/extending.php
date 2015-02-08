@@ -43,5 +43,5 @@ $v->validate([
 if($v->valid()) {
     echo 'Valid!';
 } else {
-    echo '<pre>', var_dump($v->errors()), '</pre>';
+    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
 }

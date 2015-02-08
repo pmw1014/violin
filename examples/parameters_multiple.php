@@ -8,14 +8,15 @@ $v = new Violin;
 
 $v->addFieldMessages([
     'age' => [
-        'max' => '{field} is {input}, but cannot be more than {value}'
+        'between' => 'Your age is {input}. To buy a 16-25 railcard you need to be between {value} and {value:1}',
+        'min' => 'You\'re too young to be travelling on your own.'
     ]
 ]);
 
 $v->validate([
-    'age' => 101
+    'age' => 5,
 ], [
-    'age' => 'max(100)'
+    'age' => 'required|between(16, 25)|min(10)'
 ]);
 
 if($v->valid()) {

@@ -7,13 +7,13 @@ use Violin\Violin;
 $v = new Violin;
 
 $v->addRuleMessages([
-    'required' => 'You better fill in the %s field, or else.',
-    'int' => 'The %s needs to be an integer, but I found %s.',
+    'required' => 'You better fill in the {field} field, or else.',
+    'int' => 'The {field} field needs to be an integer, but I found {input}.',
 ]);
 
 $v->validate([
     'name' => '',
-    'age' => 20
+    'age' => ''
 ], [
     'name' => 'required',
     'age' => 'required|int'
@@ -22,5 +22,5 @@ $v->validate([
 if($v->valid()) {
     echo 'Valid!';
 } else {
-    echo '<pre>', var_dump($v->errors()), '</pre>';
+    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
 }

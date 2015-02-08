@@ -36,7 +36,7 @@ $v->validate([
 if($v->valid()) {
     echo 'Valid!';
 } else {
-    echo '<pre>', var_dump($v->errors()), '</pre>';
+    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
 }
 ```
 
@@ -45,7 +45,7 @@ if($v->valid()) {
 Adding custom rules is simple. If the closure returns false, the rule fails.
 
 ```php
-$v->addRuleMessage('isBanana', '%s expects banana, found "%s" instead.');
+$v->addRuleMessage('isBanana', '{field} expects banana, found "{input}" instead.');
 
 $v->addRule('isBanana', function($field, $value) {
     return $value === 'banana';
@@ -59,15 +59,15 @@ You can add rule messages, or field messages for total flexibility.
 ### Adding a rule message
 
 ```php
-$v->addRuleMessage('required', 'You better fill in the %s field, or else.');
+$v->addRuleMessage('required', 'You better fill in the {field} field, or else.');
 ```
 
 ### Adding rule messages in bulk
 
 ```php
 $v->addRuleMessages([
-    'required' => 'You better fill in the %s field, or else.',
-    'int' => 'The %s needs to be an integer, but I found %s.',
+    'required' => 'You better fill in the {field} field, or else.',
+    'int' => 'The {field} needs to be an integer, but I found {input}.',
 ]);
 ```
 
@@ -95,24 +95,7 @@ $v->addFieldMessages([
 
 ### Error output
 
-Errors are output categorised by field, so you're free to play around with them in whatever way you need them output.
-
-```text
-array(2) {
-  ["name"]=>
-  array(1) {
-    [0]=>
-    string(16) "name is required"
-  }
-  ["age"]=>
-  array(2) {
-    [0]=>
-    string(15) "age is required"
-    [1]=>
-    string(20) "age must be a number"
-  }
-}
-```
+See `examples/messages.php`.
 
 ## Extending the Violin class
 
@@ -210,8 +193,3 @@ If the value is formatted as a valid URL.
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
-
-## Todo
-
-* Seperately handled message bag for error collecting/output
-* Allow errors to be defined with {field} and {value} rather than %s's for greater flexibility.

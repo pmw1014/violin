@@ -18,14 +18,16 @@ $v->addFieldMessages([
 
 $v->validate([
     'name' => 'Billy',
-    'username' => ''
+    'username' => '',
+    'age' => 'Twenty One'
 ], [
     'name' => 'required',
-    'username' => 'required'
+    'username' => 'required',
+    'age' => 'required|int'
 ]);
 
 if($v->valid()) {
     echo 'Valid!';
 } else {
-    echo '<pre>', var_dump($v->errors()), '</pre>';
+    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
 }
