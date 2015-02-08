@@ -15,5 +15,4 @@ class Between
     {
         return ($value >= $param1 && $value <= $param2) ? true : false;
     }
-
 }
