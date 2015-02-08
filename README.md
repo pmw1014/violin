@@ -203,7 +203,7 @@ If the value is present.
 
 #### url
 
-If the value is a valid URL.
+If the value is formatted as a valid URL.
 
 ## Contributing
 
