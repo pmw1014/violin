@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Alpha
+class BoolRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class Alpha
      */
     public function run($name, $value)
     {
-        return preg_match('/^[\pL\pM]+$/u', $value);
+        return is_bool($value);
     }
 }

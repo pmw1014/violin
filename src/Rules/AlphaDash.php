@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class AlphaDash
+class AlphaDashRule
 {
     /**
      * Run the validation

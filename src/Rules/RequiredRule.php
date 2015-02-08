@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Array
+class RequiredRule
 {
     /**
      * Run the validation
@@ -13,6 +13,8 @@ class Array
      */
     public function run($name, $value)
     {
-        return is_array($value);
+        $value = trim($value);
+
+        return !empty($value);
     }
 }

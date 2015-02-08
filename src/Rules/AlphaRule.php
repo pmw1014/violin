@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Ip
+class AlphaRule
 {
     /**
      * Run the validation
@@ -13,6 +13,6 @@ class Ip
      */
     public function run($name, $value)
     {
-        return filter_var($value, FILTER_VALIDATE_IP) !== false;
+        return preg_match('/^[\pL\pM]+$/u', $value);
     }
 }

@@ -80,7 +80,7 @@ class Validator
         if (method_exists($this, 'validate_' . $method)) {
             $toCall = [$this, 'validate_' . $method];
         } else {
-            $ruleClass = 'Violin\\Rules\\' . ucfirst($rule);
+            $ruleClass = 'Violin\\Rules\\' . ucfirst($rule) . 'Rule';
 
             if (class_exists($ruleClass)) {
                 // Create a new instance of the internal rule class.

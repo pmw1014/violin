@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Email
+class BetweenRule
 {
     /**
      * Run the validation
@@ -11,8 +11,8 @@ class Email
      * @param  mixed $value
      * @return bool
      */
-    public function run($name, $value)
+    public function run($name, $value, $param1, $param2)
     {
-        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+        return ($value >= $param1 && $value <= $param2) ? true : false;
     }
 }

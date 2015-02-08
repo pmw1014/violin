@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class ActiveUrl
+class IpRule
 {
     /**
      * Run the validation
@@ -13,8 +13,6 @@ class ActiveUrl
      */
     public function run($name, $value)
     {
-        $url = str_replace(array('http://', 'https://', 'ftp://'), '', strtolower($value));
-        
-        return !checkdnsrr($url);
+        return filter_var($value, FILTER_VALIDATE_IP) !== false;
     }
 }

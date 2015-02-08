@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Max
+class MinRule
 {
     /**
      * Run validation.
@@ -14,6 +14,6 @@ class Max
      */
     public function run($name, $value, $param1)
     {
-        return (float) $value <= (float) $param1;
+        return (float) $value >= (float) $param1;
     }
 }

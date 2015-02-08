@@ -2,7 +2,7 @@
 
 namespace Violin\Rules;
 
-class Between
+class ArrayRule
 {
     /**
      * Run the validation
@@ -11,8 +11,8 @@ class Between
      * @param  mixed $value
      * @return bool
      */
-    public function run($name, $value, $param1, $param2)
+    public function run($name, $value)
     {
-        return ($value >= $param1 && $value <= $param2) ? true : false;
+        return is_array($value);
     }
 }
