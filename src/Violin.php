@@ -17,6 +17,8 @@ class Violin extends Validator
      */
     public function validate($fields, $rules)
     {
+        $this->errors = [];
+
         // Loop each requested validation field
         foreach ($fields as $name => $value) {
             // Get rules, which are originally
