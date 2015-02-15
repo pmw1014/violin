@@ -7,11 +7,11 @@ use Violin\Violin;
 $v = new Violin;
 
 $v->validate([
-    'name' => '',
-    'age' => 'twenty'
+    'name'  => '',
+    'age'   => 'twenty'
 ], [
-    'name' => 'required',
-    'age' => 'required|int'
+    'name'  => 'required',
+    'age'   => 'required|int'
 ]);
 
 if($v->valid()) {

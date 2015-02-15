@@ -11,10 +11,10 @@ $v = new Violin;
 $v->addFieldMessage('username', 'required', 'You need to enter a username to sign up.');
 
 $v->validate([
-    'name' => 'Billy',
+    'name'     => 'Billy',
     'username' => ''
 ], [
-    'name' => 'required',
+    'name'     => 'required',
     'username' => 'required'
 ]);
 

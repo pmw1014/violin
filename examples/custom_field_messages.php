@@ -12,18 +12,18 @@ $v->addFieldMessages([
     ],
     'age' => [
         'required' => 'I need your age.',
-        'int' => 'Your age needs to be an integer.',
+        'int'      => 'Your age needs to be an integer.',
     ]
 ]);
 
 $v->validate([
-    'name' => 'Billy',
+    'name'     => 'Billy',
     'username' => '',
-    'age' => 'Twenty One'
+    'age'      => 'Twenty One'
 ], [
-    'name' => 'required',
+    'name'     => 'required',
     'username' => 'required',
-    'age' => 'required|int'
+    'age'      => 'required|int'
 ]);
 
 if($v->valid()) {
