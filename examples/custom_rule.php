@@ -13,11 +13,11 @@ $v->addRule('isBanana', function($field, $value) {
 });
 
 $v->validate([
-    'name' => 'billy',
-    'age' => 20
+    'name'  => 'billy',
+    'age'   => 20
 ], [
-    'name' => 'required|isBanana',
-    'age' => 'required|int'
+    'name'  => 'required|isBanana',
+    'age'   => 'required|int'
 ]);
 
 if($v->valid()) {

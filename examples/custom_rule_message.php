@@ -9,11 +9,11 @@ $v = new Violin;
 $v->addRuleMessage('required', 'You better fill in the {field} field, or else.');
 
 $v->validate([
-    'name' => '',
-    'age' => 20
+    'name'  => '',
+    'age'   => 20
 ], [
-    'name' => 'required',
-    'age' => 'required|int'
+    'name'  => 'required',
+    'age'   => 'required|int'
 ]);
 
 if($v->valid()) {

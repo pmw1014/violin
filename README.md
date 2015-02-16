@@ -26,11 +26,11 @@ use Violin\Violin;
 $v = new Violin;
 
 $v->validate([
-    'name' => 'billy',
-    'age' => 20
+    'name'  => 'billy',
+    'age'   => 20
 ], [
-    'name' => 'required',
-    'age' => 'required|int'
+    'name'  => 'required',
+    'age'   => 'required|int'
 ]);
 
 if($v->valid()) {
@@ -67,7 +67,7 @@ $v->addRuleMessage('required', 'You better fill in the {field} field, or else.')
 ```php
 $v->addRuleMessages([
     'required' => 'You better fill in the {field} field, or else.',
-    'int' => 'The {field} needs to be an integer, but I found {input}.',
+    'int'      => 'The {field} needs to be an integer, but I found {input}.',
 ]);
 ```
 
@@ -88,7 +88,7 @@ $v->addFieldMessages([
     ],
     'age' => [
         'required' => 'I need your age.',
-        'int' => 'Your age needs to be an integer.',
+        'int'      => 'Your age needs to be an integer.',
     ]
 ]);
 ```
@@ -158,7 +158,7 @@ If the value is alphabetic letters only. Dashes and underscores are permitted.
 
 If the value is an array.
 
-### between(int, int)
+#### between(int, int)
 
 Checks if the value is within the intervals defined.
 

@@ -8,8 +8,8 @@ $v = new Violin;
 
 $v->addFieldMessages([
     'age' => [
-        'between' => 'Your age is {input}. To buy a 16-25 railcard you need to be between {value} and {value:1}',
-        'min' => 'You\'re too young to be travelling on your own.'
+        'between'   => 'Your age is {input}. To buy a 16-25 railcard you need to be between {value} and {value:1}',
+        'min'       => 'You\'re too young to be travelling on your own.'
     ]
 ]);
 
