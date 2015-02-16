@@ -12,8 +12,8 @@ class MaxRule
      * @param mixed $param1
      * @return bool
      */
-    public function run($name, $value, $param1)
+    public function run($name, $value, $args)
     {
-        return (float) $value <= (float) $param1;
+        return (float) $value <= (float) $args[0];
     }
 }
