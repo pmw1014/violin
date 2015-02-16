@@ -11,8 +11,8 @@ class BetweenRule
      * @param  mixed $value
      * @return bool
      */
-    public function run($name, $value, $param1, $param2)
+    public function run($name, $value, $args)
     {
-        return ($value >= $param1 && $value <= $param2) ? true : false;
+        return ($value >= $args[0] && $value <= $args[1]) ? true : false;
     }
 }

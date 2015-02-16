@@ -108,11 +108,6 @@ class Validator
      */
     protected function callAndValidate($rule, $toCall, $args)
     {
-        // Flatten args to pass them correctly to the run method.
-        $args = iterator_to_array(new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($args)
-        ), false);
-
         $valid = call_user_func_array($toCall, $args);
 
         if (!$valid && $valid !== null) {
@@ -153,17 +148,19 @@ class Validator
      * @param  array $arguments
      * @return string
      */
-    protected function replace($message, $arguments)
+    protected function replaceMessageFormat($message, $arguments)
     {
-        if (count($arguments) > 3) {
-            // If the arguments array is bigger than the format
-            // array, then we need to consider that the rule has
-            // multiple paramaters.
+        if (isset($arguments[2])) {
+            // If the array arguments are set, it means we have
+            // arguments, so need to loop and replace in a new format.
+
             $format = $this->format;
 
             for ($i = 2; $i < count($arguments); $i++) {
                 $format[] = '{value:' . ($i - 1) . '}';
             }
+
+            $arguments = $this->flattenArguments($arguments);
 
             return str_replace($format, $arguments, $message);
         }
@@ -191,7 +188,7 @@ class Validator
                     : $this->ruleMessages[$messageKey];
 
                 // Initiate the replacement of the string.
-                $message = $this->replace($message, $proprieties['args']);
+                $message = $this->replaceMessageFormat($message, $proprieties['args']);
 
                 array_push($messages[$field], $message);
             }
@@ -321,5 +318,12 @@ class Validator
     protected function getRuleNameForParametarizedRule($rule)
     {
         return explode('(', $rule)[0];
+    }
+
+    protected function flattenArguments(array $arguments)
+    {
+        return iterator_to_array(new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($arguments)
+        ), false);
     }
 }
