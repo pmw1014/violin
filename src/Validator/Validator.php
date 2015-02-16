@@ -50,7 +50,7 @@ class Validator
      *
      * @var array
      */
-    protected $errors;
+    public $errors;
 
     /**
      * Custom defined rules
@@ -151,8 +151,6 @@ class Validator
     protected function replaceMessageFormat($message, $arguments)
     {
         if (isset($arguments[2])) {
-            // If the array arguments are set, it means we have
-            // arguments, so need to loop and replace in a new format.
 
             $format = $this->format;
 
@@ -177,21 +175,13 @@ class Validator
     {
         $messages = [];
 
-        foreach ($this->errors as $field => $proprieties) {
-            $messages[$field] = [];
+        foreach ($this->errors as $rule => $properties) {
 
-            foreach ($proprieties['errors'] as $messageKey) {
-                // If a field message has been set, we use this as preference.
-                // Otherwise, we use the standard rule messages.
-                $message = isset($this->fieldMessages[$field][$messageKey])
-                    ? $this->fieldMessages[$field][$messageKey]
-                    : $this->ruleMessages[$messageKey];
+            $message = isset($this->fieldMessages[$properties[0]][$rule])
+                ? $this->fieldMessages[$properties[0]][$rule]
+                : $this->ruleMessages[$rule];
 
-                // Initiate the replacement of the string.
-                $message = $this->replaceMessageFormat($message, $proprieties['args']);
-
-                array_push($messages[$field], $message);
-            }
+            $messages[$properties[0]][] = $this->replaceMessageFormat($message, $properties);
         }
 
         return new MessageBag($messages);
@@ -214,18 +204,9 @@ class Validator
      * @param  array $args
      * @return void
      */
-    public function error($messageKey, $args)
+    public function error($rule, $args)
     {
-        // Extract the field name from the arguments.
-        $field = $args[0];
-
-        $this->errors[$field]['args'] = $args;
-
-        if (!array_key_exists('errors', $this->errors[$field])) {
-            $this->errors[$field]['errors'] = [];
-        }
-
-        array_push($this->errors[$field]['errors'], $messageKey);
+        $this->errors[$rule] = $args;
     }
 
     /**
