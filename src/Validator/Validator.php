@@ -151,7 +151,6 @@ class Validator
     protected function replaceMessageFormat($message, $arguments)
     {
         if (isset($arguments[2])) {
-
             $format = $this->format;
 
             for ($i = 2; $i < count($arguments); $i++) {
@@ -176,7 +175,6 @@ class Validator
         $messages = [];
 
         foreach ($this->errors as $rule => $properties) {
-
             $message = isset($this->fieldMessages[$properties[0]][$rule])
                 ? $this->fieldMessages[$properties[0]][$rule]
                 : $this->ruleMessages[$rule];
