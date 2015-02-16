@@ -174,12 +174,19 @@ class Validator
     {
         $messages = [];
 
-        foreach ($this->errors as $rule => $properties) {
-            $message = isset($this->fieldMessages[$properties[0]][$rule])
-                ? $this->fieldMessages[$properties[0]][$rule]
-                : $this->ruleMessages[$rule];
+        foreach ($this->errors as $rule => $fields) {
 
-            $messages[$properties[0]][] = $this->replaceMessageFormat($message, $properties);
+            foreach($fields as $field) {
+
+                $fieldName = $field[0];
+
+                // Determine which message to display, rule or field.
+                $message = isset($this->fieldMessages[$fieldName][$rule])
+                    ? $this->fieldMessages[$fieldName][$rule]
+                    : $this->ruleMessages[$rule];
+
+                $messages[$fieldName][] = $this->replaceMessageFormat($message, $field);
+            }
         }
 
         return new MessageBag($messages);
@@ -204,7 +211,7 @@ class Validator
      */
     public function error($rule, $args)
     {
-        $this->errors[$rule] = $args;
+        $this->errors[$rule][] = $args;
     }
 
     /**
