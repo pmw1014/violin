@@ -175,9 +175,7 @@ class Validator
         $messages = [];
 
         foreach ($this->errors as $rule => $fields) {
-
-            foreach($fields as $field) {
-
+            foreach ($fields as $field) {
                 $fieldName = $field[0];
 
                 // Determine which message to display, rule or field.
