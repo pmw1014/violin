@@ -1,7 +1,5 @@
 <?php
 
-require_once 'vendor/autoload.php';
-
 use Violin\Violin;
 
 class RulesTest extends PHPUnit_Framework_TestCase
@@ -39,7 +37,7 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
     public function testAlphaDashRule()
     {
-        /*$this->v->validate(['username' => 'violin-tests_1_alphaDash'], ['username' => 'alphaDash']);
+        $this->v->validate(['username' => 'violin-tests_1_alphaDash'], ['username' => 'alphaDash']);
         $this->assertFalse($this->v->valid());
 
         $this->v->validate(['username' => 'violinTests_two-alphaDash'], ['username' => 'alphaDash']);
@@ -49,7 +47,7 @@ class RulesTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->v->valid());
 
         $this->v->validate(['username' => 'violinTests'], ['username' => 'alphaDash']);
-        $this->assertTrue($this->v->valid());*/
+        $this->assertTrue($this->v->valid());
     }
 
     public function testAlphaRule()
@@ -69,7 +67,11 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
     public function testArrayRule()
     {
-        // Check Issue #21 @https://github.com/alexgarrett/violin/issues/21
+        $this->v->validate(['user' => ['name', '20', 'email@example.com'] ], ['user' => 'array']);
+        $this->assertTrue($this->v->valid());
+
+        $this->v->validate(['user' => ['name' => 'Violin', 'vcs' => 'git'] ], ['user' => 'array']);
+        $this->assertTrue($this->v->valid());
     }
 
     public function testBetweenRule()

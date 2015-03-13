@@ -1,7 +1,5 @@
 <?php
 
-require_once 'vendor/autoload.php';
-
 use Violin\Violin;
 
 class ValidatorTest extends PHPUnit_Framework_TestCase

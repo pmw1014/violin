@@ -17,6 +17,7 @@ class Violin extends Validator
      */
     public function validate($fields, $rules)
     {
+        // Clean the errors array to allow multiple validations in one instance.
         $this->errors = [];
 
         // Loop each requested validation field
