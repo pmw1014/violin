@@ -103,7 +103,7 @@ $v->addFieldMessages([
 
 You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection.
 
-```
+```php
 class MyValidator extends Violin
 {
     protected $db;
