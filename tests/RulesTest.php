@@ -7,6 +7,7 @@ use Violin\Rules\MaxRule;
 use Violin\Rules\MinRule;
 use Violin\Rules\BoolRule;
 use Violin\Rules\DateRule;
+use Violin\Rules\RegexRule;
 use Violin\Rules\AlnumRule;
 use Violin\Rules\AlphaRule;
 use Violin\Rules\EmailRule;
@@ -518,6 +519,25 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $checkedRule->run('true', [], [])
+        );
+    }
+
+    public function testRegexRule()
+    {
+        $regexRule = new RegexRule;
+
+        $exampleRegex = '/b[aeiou]g/';
+
+        $this->assertFalse(
+            $regexRule->run('banter', [], [$exampleRegex])
+        );
+
+        $this->assertTrue(
+            $regexRule->run('bag', [], [$exampleRegex])
+        );
+
+        $this->assertTrue(
+            $regexRule->run('big', [], [$exampleRegex])
         );
     }
 }

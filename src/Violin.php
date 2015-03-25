@@ -62,7 +62,8 @@ class Violin implements ValidatorContract
         'url'       => '{field} must be a valid URL.',
         'number'    => '{field} must be a number.',
         'date'      => '{field} must be a valid date.',
-        'checked'   => 'You need to check the {field} field.'
+        'checked'   => 'You need to check the {field} field.',
+        'regex'     => '{field} was not in the correct format.'
     ];
 
     /**
