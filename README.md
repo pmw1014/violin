@@ -189,6 +189,12 @@ If the value is a valid email.
 
 If the value is an integer, including numbers within strings. 1 and '1' are both classed as integers.
 
+#### number
+
+If the value is a number, including numbers within strings.
+
+> Numeric strings consist of optional sign, any number of digits, optional decimal part and optional exponential part. Thus +0123.45e6 is a valid numeric value. Hexadecimal (e.g. 0xf4c3b00c), Binary (e.g. 0b10100111001), Octal (e.g. 0777) notation is allowed too but only without sign, decimal and exponential part.
+
 #### ip
 
 If the value is a valid IP address.

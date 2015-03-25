@@ -10,6 +10,7 @@ use Violin\Rules\AlnumRule;
 use Violin\Rules\AlphaRule;
 use Violin\Rules\EmailRule;
 use Violin\Rules\ArrayRule;
+use Violin\Rules\NumberRule;
 use Violin\Rules\BetweenRule;
 use Violin\Rules\MatchesRule;
 use Violin\Rules\RequiredRule;
@@ -58,6 +59,35 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $intRule->run(10, [], [])
+        );
+    }
+
+    public function testNumberRule()
+    {
+        $numberRule = new NumberRule;
+
+        $this->assertFalse(
+            $numberRule->run('dale', [], [])
+        );
+
+        $this->assertFalse(
+            $numberRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $numberRule->run('three', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run('1', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run('3.14159265359', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run(3.14159265359, [], [])
         );
     }
 
