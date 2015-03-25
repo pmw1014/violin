@@ -2,18 +2,13 @@
 
 namespace Violin\Rules;
 
-class RequiredRule
+use Violin\Contracts\RuleContract;
+
+class RequiredRule implements RuleContract
 {
-    /**
-     * Run the validation
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return bool
-     */
-    public function run($name, $value)
+    public function run($value, $input, $args)
     {
-        $value = trim($value);
+        $value = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $value);
 
         return !empty($value);
     }

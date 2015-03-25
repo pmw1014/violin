@@ -2,16 +2,11 @@
 
 namespace Violin\Rules;
 
-class ArrayRule
+use Violin\Contracts\RuleContract;
+
+class ArrayRule implements RuleContract
 {
-    /**
-     * Run the validation
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return bool
-     */
-    public function run($name, $value)
+    public function run($value, $input, $args)
     {
         return is_array($value);
     }

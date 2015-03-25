@@ -2,17 +2,11 @@
 
 namespace Violin\Rules;
 
-class MinRule
+use Violin\Contracts\RuleContract;
+
+class MinRule implements RuleContract
 {
-    /**
-     * Run validation.
-     *
-     * @param string $name
-     * @param int|float $value
-     * @param mixed $param1
-     * @return bool
-     */
-    public function run($name, $value, $args)
+    public function run($value, $input, $args)
     {
         return (float) $value >= (float) $args[0];
     }

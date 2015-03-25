@@ -2,7 +2,12 @@
 
 namespace Violin\Support;
 
-class MessageBag
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+
+use Violin\Contracts\MessageBagContract;
+
+class MessageBag implements MessageBagContract
 {
     /**
      * The registered messages.
@@ -74,15 +79,9 @@ class MessageBag
      */
     public function all()
     {
-        $messages = [];
-
-        foreach ($this->messages as $key => $value) {
-            foreach ($value as $message) {
-                $messages[] = $message;
-            }
-        }
-
-        return $messages;
+        return iterator_to_array(new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($this->messages)
+        ), false);
     }
 
     /**
