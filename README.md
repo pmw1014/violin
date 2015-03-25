@@ -99,6 +99,56 @@ $v->addFieldMessages([
 ]);
 ```
 
+### Extending Violin
+
+You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection.
+
+```
+class MyValidator extends Violin
+{
+    protected $db;
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
+        
+        // Add rule message for custom rule method.
+        $this->addRuleMessage('uniqueUsername', 'That username is taken.');
+    }
+    
+    // Custom rule method for checking a unique username in our database.
+    // Just prepend custom rules with validate_
+    public function validate_uniqueUsername($value, $input, $args)
+    {
+        $user = $this->db->prepare("
+            SELECT count(*) as count
+            FROM users
+            WHERE username = :username
+        ");
+
+        $user->execute(['username' => $value]);
+
+        if($user->fetchObject()->count) {
+            return false; // Username exists, so return false.
+        }
+
+        return true;
+    }
+}
+
+// A database connection.
+$db = new PDO('mysql:host=127.0.0.1;dbname=website', 'root', 'root');
+
+// Instantiate your custom class with dependencies.
+$v = new MyValidator($db);
+
+$v->validate([
+    'username' => 'billy'
+], [
+    'username' => 'required|uniqueUsername'
+]);
+```
+
 ## Rules
 
 This list of rules are **in progress**. Of course, you can always contribute to the project if you'd like to add more to the base ruleset.
