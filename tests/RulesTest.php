@@ -284,7 +284,7 @@ class RulesTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testMaxRule()
+    public function testMaxRuleWithNumbers()
     {
         $maxRule = new MaxRule;
 
@@ -313,7 +313,7 @@ class RulesTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testMinRule()
+    public function testMinRuleWithNumbers()
     {
         $minRule = new MinRule;
 
@@ -339,6 +339,32 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $minRule->run('100', [], ['5.5'])
+        );
+    }
+
+    public function testMaxRuleWithStrings()
+    {
+        $maxRule = new MaxRule;
+
+        $this->assertFalse(
+            $maxRule->run('william', [], ['5'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('billy', [], ['5'])
+        );
+    }
+
+    public function testMinRuleWithStrings()
+    {
+        $minRule = new MinRule;
+
+        $this->assertFalse(
+            $minRule->run('billy', [], ['10'])
+        );
+
+        $this->assertTrue(
+            $minRule->run('william', [], ['5'])
         );
     }
 
