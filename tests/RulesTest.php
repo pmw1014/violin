@@ -1,6 +1,6 @@
 <?php
 
-use Violin\Rules\IPRule;
+use Violin\Rules\IpRule;
 use Violin\Rules\IntRule;
 use Violin\Rules\UrlRule;
 use Violin\Rules\MaxRule;
@@ -249,7 +249,7 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
     public function testIpRule()
     {
-        $ipRule = new IPRule;
+        $ipRule = new IpRule;
 
         $this->assertFalse(
             $ipRule->run('127', [], [])

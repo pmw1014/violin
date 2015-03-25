@@ -4,7 +4,7 @@ namespace Violin\Rules;
 
 use Violin\Contracts\RuleContract;
 
-class IPRule implements RuleContract
+class IpRule implements RuleContract
 {
     public function run($value, $input, $args)
     {
