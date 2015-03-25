@@ -343,7 +343,7 @@ class Violin implements ValidatorContract
      */
     protected function ruleHasArgs($rule)
     {
-        return (bool)preg_match("/.+\([a-zA-Z0-9,'\" _]+\)/", $rule);
+        return isset(explode('(', $rule)[1]);
     }
 
     /**
