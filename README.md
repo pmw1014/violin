@@ -219,6 +219,12 @@ If the value is formatted as a valid URL.
 
 Checks if one given input matches the other. For example, checking if *password* matches *password_confirm*.
 
+#### date
+
+If the given input is a valid date.
+
+You can validate human readable dates like '25th October 1961' and instances of `DateTime`. For example, `new DateTime('2 days ago')->format('d m Y')`.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.

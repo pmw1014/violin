@@ -6,6 +6,7 @@ use Violin\Rules\UrlRule;
 use Violin\Rules\MaxRule;
 use Violin\Rules\MinRule;
 use Violin\Rules\BoolRule;
+use Violin\Rules\DateRule;
 use Violin\Rules\AlnumRule;
 use Violin\Rules\AlphaRule;
 use Violin\Rules\EmailRule;
@@ -440,6 +441,45 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $urlRule->run('http://codecourse.com', [], [])
+        );
+    }
+
+    public function testDateRule()
+    {
+        $dateRule = new DateRule;
+
+        $this->assertFalse(
+            $dateRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $dateRule->run('0000-00-00', [], [])
+        );
+
+        $this->assertFalse(
+            $dateRule->run('40th November 1989', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('16th November 1989', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('1989-11-16', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('16-11-1989', [], [])
+        );
+
+        $dateTime = new DateTime('2 days ago');
+
+        $this->assertFalse(
+            $dateRule->run($dateTime->format('x y z'), [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run($dateTime->format('d M Y'), [], [])
         );
     }
 }
