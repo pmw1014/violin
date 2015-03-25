@@ -101,7 +101,7 @@ $v->addFieldMessages([
 
 ### Extending Violin
 
-You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection.
+You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection or language files.
 
 ```php
 class MyValidator extends Violin
@@ -193,13 +193,13 @@ If the value is an integer, including integers within strings. 1 and '1' are bot
 
 If the value is a valid IP address.
 
-#### max(int)
+#### max(int/string)
 
-Checks if the value is less than or equal to the given parameter.
+Checks if the value is less than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is less than or equal to the given parameter.
 
-#### min(int)
+#### min(int/string)
 
-Checks if the value is greater than or equal to the given parameter.
+Checks if the value is greater than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is greater than or equal to the given parameter.
 
 #### required
 
