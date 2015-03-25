@@ -47,7 +47,7 @@ Adding custom rules is simple. If the closure returns false, the rule fails.
 ```php
 $v->addRuleMessage('isbanana', 'The {field} field expects "banana", found "{value}" instead.');
 
-$v->addRule('isbanana', function($field, $value) {
+$v->addRule('isbanana', function($value, $input, $args) {
     return $value === 'banana';
 });
 
