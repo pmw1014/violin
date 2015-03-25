@@ -236,6 +236,10 @@ $v->validate([
 ]);
 ```
 
+#### checked
+
+If a field has been 'checked' or not, meaning it contains one of the following value: *'yes'*, *'on'*, *'1'*, *1*, *true*, or *'true'*. This can be used for determining if an HTML checkbox has been checked.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.

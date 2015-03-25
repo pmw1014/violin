@@ -12,6 +12,7 @@ use Violin\Rules\AlphaRule;
 use Violin\Rules\EmailRule;
 use Violin\Rules\ArrayRule;
 use Violin\Rules\NumberRule;
+use Violin\Rules\CheckedRule;
 use Violin\Rules\BetweenRule;
 use Violin\Rules\MatchesRule;
 use Violin\Rules\RequiredRule;
@@ -480,6 +481,43 @@ class RulesTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $dateRule->run($dateTime->format('d M Y'), [], [])
+        );
+    }
+
+    public function testCheckedRule()
+    {
+        $checkedRule = new CheckedRule;
+
+        $this->assertFalse(
+            $checkedRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $checkedRule->run('   ', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('on', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('yes', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run(1, [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('1', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run(true, [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('true', [], [])
         );
     }
 }
