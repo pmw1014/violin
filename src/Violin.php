@@ -60,6 +60,8 @@ class Violin implements ValidatorContract
         'max'       => '{field} must be a maximum of {arg}',
         'min'       => '{field} must be a minimum of {arg}',
         'url'       => '{field} must be a valid URL.',
+        'number'    => '{field} must be a number.',
+        'date'      => '{field} must be a valid date.'
     ];
 
     /**
