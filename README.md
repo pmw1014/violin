@@ -13,7 +13,7 @@ Install using Composer.
 ```json
 {
     "require": {
-        "alexgarrett/violin": "1.*"
+        "alexgarrett/violin": "2.*"
     }
 }
 ```
@@ -33,10 +33,10 @@ $v->validate([
     'age'   => 'required|int'
 ]);
 
-if($v->valid()) {
-    echo 'Valid!';
+if($v->passes()) {
+    echo 'Validation passed, woo!';
 } else {
-    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
+    echo '<pre>', var_dump($v->errors()->all()), '</pre>';
 }
 ```
 
@@ -45,11 +45,17 @@ if($v->valid()) {
 Adding custom rules is simple. If the closure returns false, the rule fails.
 
 ```php
-$v->addRuleMessage('isBanana', '{field} expects banana, found "{input}" instead.');
+$v->addRuleMessage('isbanana', 'The {field} field expects "banana", found "{value}" instead.');
 
-$v->addRule('isBanana', function($field, $value) {
+$v->addRule('isbanana', function($field, $value) {
     return $value === 'banana';
 });
+
+$v->validate([
+    'fruit' => 'apple'
+], [
+    'fruit' => 'isbanana'
+]);
 ```
 
 ## Adding custom error messages
@@ -67,13 +73,13 @@ $v->addRuleMessage('required', 'You better fill in the {field} field, or else.')
 ```php
 $v->addRuleMessages([
     'required' => 'You better fill in the {field} field, or else.',
-    'int'      => 'The {field} needs to be an integer, but I found {input}.',
+    'int'      => 'The {field} needs to be an integer, but I found {value}.',
 ]);
 ```
 
 ### Adding a field message
 
-Any field messages you add are preferred over any default or custom rule messages.
+Any field messages you add are used before any default or custom rule messages.
 
 ```php
 $v->addFieldMessage('username', 'required', 'You need to enter a username to sign up.');
@@ -93,50 +99,9 @@ $v->addFieldMessages([
 ]);
 ```
 
-### Error output
-
-See `examples/messages.php`.
-
-## Extending the Violin class
-
-You can extend Violin to implement your own validation class and add rules, custom rule messages and custom field messages.
-
-```php
-class Validator extends Violin\Violin
-{
-    protected $db;
-
-    protected function __construct(Database $db)
-    {
-        $this->db = $db; // Some database dependency
-
-        // You can add a custom rule message here if you like, or, you
-        // could add it outside of this validation class when you
-        // make use of your new Validator object.
-        $this->addRuleMessage('usernameDoesNotExist', 'That username is taken');
-    }
-
-    // Prepend your validation rule name with validate_
-    public function validate_usernameDoesNotExist($field, $value)
-    {
-        if($db->where('username', '=', $value)->count()) {
-            return false;
-        }
-    }
-}
-
-$v = new Validator;
-
-// ... and so on.
-```
-
 ## Rules
 
 This list of rules are **in progress**. Of course, you can always contribute to the project if you'd like to add more to the base ruleset.
-
-#### activeUrl
-
-If the URL provided is an active URL using checkdnsrr().
 
 #### alnum
 
@@ -180,11 +145,11 @@ If the value is a valid IP address.
 
 #### max(int)
 
-Rule with parameter. Checks if the value is less or equals than parameter.
+Checks if the value is less than or equal to the given parameter.
 
 #### min(int)
 
-Rule with parameter. Checks if the value is greater or equals than parameter.
+Checks if the value is greater than or equal to the given parameter.
 
 #### required
 
@@ -194,6 +159,14 @@ If the value is present.
 
 If the value is formatted as a valid URL.
 
+#### matches(field)
+
+Checks if one given input matches the other. For example, checking if *password* matches *password_confirm*.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
+
+### Running tests
+
+Tests are run with phpunit. Run `./vendor/bin/phpunit` to run tests.
