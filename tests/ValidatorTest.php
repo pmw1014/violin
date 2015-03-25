@@ -27,8 +27,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'password_again' => 'required|matches(password)',
         ]);
 
-        $this->assertTrue($this->v->passed());
-        $this->assertFalse($this->v->failed());
+        $this->assertTrue($this->v->passes());
+        $this->assertFalse($this->v->fails());
     }
 
     public function testBasicInvalidValidation()
@@ -47,8 +47,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'password_again' => 'required|matches(password)',
         ]);
 
-        $this->assertTrue($this->v->failed());
-        $this->assertFalse($this->v->passed());
+        $this->assertTrue($this->v->fails());
+        $this->assertFalse($this->v->passes());
     }
 
     public function testRuleMessage()
@@ -154,7 +154,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fruit' => 'isbanana'
         ]);
 
-        $this->assertFalse($this->v->passed());
+        $this->assertFalse($this->v->passes());
     }
 
     public function testFailingCustomRule()
@@ -169,7 +169,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fruit' => 'isbanana'
         ]);
 
-        $this->assertTrue($this->v->passed());
+        $this->assertTrue($this->v->passes());
     }
 
     public function testMultipleCustomRules()
@@ -190,7 +190,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'fruit_two' => 'isapple',
         ]);
 
-        $this->assertTrue($this->v->passed());
+        $this->assertTrue($this->v->passes());
     }
 
     public function testPassingCustomRuleWithArguments()
@@ -205,7 +205,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'items' => 'isoneof(seeds, nuts, fruit)'
         ]);
 
-        $this->assertTrue($this->v->passed());
+        $this->assertTrue($this->v->passes());
     }
 
     public function testFailingCustomRuleWithArguments()
@@ -220,6 +220,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'items' => 'isoneof(seeds, nuts, fruit)'
         ]);
 
-        $this->assertFalse($this->v->passed());
+        $this->assertFalse($this->v->passes());
     }
 }

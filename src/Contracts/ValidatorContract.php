@@ -7,8 +7,8 @@ use Closure;
 interface ValidatorContract
 {
     public function validate(array $input, array $rules);
-    public function passed();
-    public function failed();
+    public function passes();
+    public function fails();
     public function errors();
     public function addRuleMessage($rule, $message);
     public function addRuleMessages(array $messages);

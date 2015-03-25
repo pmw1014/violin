@@ -110,7 +110,7 @@ class Violin implements ValidatorContract
      *
      * @return bool
      */
-    public function passed()
+    public function passes()
     {
         return empty($this->errors);
     }
@@ -120,7 +120,7 @@ class Violin implements ValidatorContract
      *
      * @return bool
      */
-    public function failed()
+    public function fails()
     {
         return !empty($this->errors);
     }
@@ -132,7 +132,7 @@ class Violin implements ValidatorContract
      */
     public function errors()
     {
-        if ($this->passed()) {
+        if ($this->passes()) {
             return null;
         }
 
