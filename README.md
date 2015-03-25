@@ -175,7 +175,7 @@ If the value is an array.
 
 #### between(int, int)
 
-Checks if the value is within the intervals defined.
+Checks if the value is within the intervals defined. This check is inclusive, so 5 is between 5 and 10.
 
 #### bool
 
@@ -238,7 +238,7 @@ $v->validate([
 
 #### checked
 
-If a field has been 'checked' or not, meaning it contains one of the following value: *'yes'*, *'on'*, *'1'*, *1*, *true*, or *'true'*. This can be used for determining if an HTML checkbox has been checked.
+If a field has been 'checked' or not, meaning it contains one of the following values: *'yes'*, *'on'*, *'1'*, *1*, *true*, or *'true'*. This can be used for determining if an HTML checkbox has been checked.
 
 ## Contributing
 
