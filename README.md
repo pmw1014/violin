@@ -223,7 +223,18 @@ Checks if one given input matches the other. For example, checking if *password*
 
 If the given input is a valid date.
 
-You can validate human readable dates like '25th October 1961' and instances of `DateTime`. For example, `new DateTime('2 days ago')->format('d m Y')`.
+You can validate human readable dates like '25th October 1961' and instances of `DateTime`. For example:
+
+```php
+$twoDaysAgo = new DateTime('2 days ago');
+$date = $twoDaysAgo->format('d M Y');
+
+$v->validate([
+    'date' => $date
+], [
+    'date' => 'required|date'
+]);
+```
 
 ## Contributing
 
