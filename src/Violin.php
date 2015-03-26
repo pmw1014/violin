@@ -136,10 +136,6 @@ class Violin implements ValidatorContract
      */
     public function errors()
     {
-        if ($this->passes()) {
-            return null;
-        }
-
         $messages = [];
 
         foreach ($this->errors as $rule => $items) {
