@@ -2,16 +2,11 @@
 
 namespace Violin\Rules;
 
-class BetweenRule
+use Violin\Contracts\RuleContract;
+
+class BetweenRule implements RuleContract
 {
-    /**
-     * Run the validation
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return bool
-     */
-    public function run($name, $value, $args)
+    public function run($value, $input, $args)
     {
         return ($value >= $args[0] && $value <= $args[1]) ? true : false;
     }

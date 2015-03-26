@@ -2,16 +2,11 @@
 
 namespace Violin\Rules;
 
-class IntRule
+use Violin\Contracts\RuleContract;
+
+class IntRule implements RuleContract
 {
-    /**
-     * Run the validation
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return bool
-     */
-    public function run($name, $value)
+    public function run($value, $input, $args)
     {
         return is_numeric($value) && (int)$value == $value;
     }

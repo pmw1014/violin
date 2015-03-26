@@ -2,18 +2,18 @@
 
 namespace Violin\Rules;
 
-class MaxRule
+use Violin\Contracts\RuleContract;
+
+class MaxRule implements RuleContract
 {
-    /**
-     * Run validation.
-     *
-     * @param string $name
-     * @param int|float $value
-     * @param mixed $param1
-     * @return bool
-     */
-    public function run($name, $value, $args)
+    public function run($value, $input, $args)
     {
-        return (float) $value <= (float) $args[0];
+        if (is_numeric($value)) {
+            return (float) $value <= (float) $args[0];
+        }
+
+        if (is_string($value)) {
+            return mb_strlen($value) <= (int) $args[0];
+        }
     }
 }

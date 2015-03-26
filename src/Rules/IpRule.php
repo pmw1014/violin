@@ -2,16 +2,11 @@
 
 namespace Violin\Rules;
 
-class IpRule
+use Violin\Contracts\RuleContract;
+
+class IpRule implements RuleContract
 {
-    /**
-     * Run the validation
-     *
-     * @param  string $name
-     * @param  mixed $value
-     * @return bool
-     */
-    public function run($name, $value)
+    public function run($value, $input, $args)
     {
         return filter_var($value, FILTER_VALIDATE_IP) !== false;
     }
