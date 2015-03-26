@@ -1,181 +1,543 @@
 <?php
 
-use Violin\Violin;
+use Violin\Rules\IpRule;
+use Violin\Rules\IntRule;
+use Violin\Rules\UrlRule;
+use Violin\Rules\MaxRule;
+use Violin\Rules\MinRule;
+use Violin\Rules\BoolRule;
+use Violin\Rules\DateRule;
+use Violin\Rules\RegexRule;
+use Violin\Rules\AlnumRule;
+use Violin\Rules\AlphaRule;
+use Violin\Rules\EmailRule;
+use Violin\Rules\ArrayRule;
+use Violin\Rules\NumberRule;
+use Violin\Rules\CheckedRule;
+use Violin\Rules\BetweenRule;
+use Violin\Rules\MatchesRule;
+use Violin\Rules\RequiredRule;
+use Violin\Rules\AlnumDashRule;
+
+use Violin\Support\MessageBag;
 
 class RulesTest extends PHPUnit_Framework_TestCase
 {
-    public $v;
-
-    public function setUp()
-    {
-        $this->v = new Violin;
-    }
-
-    public function testAlnumDashRule()
-    {
-        $this->v->validate(['username' => 'violin-tests_1_alnum'], ['username' => 'alnumDash']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['username' => 'violinTests2Alnum'], ['username' => 'alnumDash']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['username' => 'violin-tests@3_alnum'], ['username' => 'alnumDash']);
-        $this->assertFalse($this->v->valid());
-    }
-
-    public function testAlnumRule()
-    {
-        $this->v->validate(['username' => 'violin-tests_alnum'], ['username' => 'alnum']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violin'], ['username' => 'alnum']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['username' => 'violin-tests@alnum'], ['username' => 'alnum']);
-        $this->assertFalse($this->v->valid());
-    }
-
-    public function testAlphaDashRule()
-    {
-        $this->v->validate(['username' => 'violin-tests_1_alphaDash'], ['username' => 'alphaDash']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violinTests_two-alphaDash'], ['username' => 'alphaDash']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['username' => 'violin-tests@_three_alphaDash'], ['username' => 'alphaDash']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violinTests'], ['username' => 'alphaDash']);
-        $this->assertTrue($this->v->valid());
-    }
-
-    public function testAlphaRule()
-    {
-        $this->v->validate(['username' => 'violin-tests_1_alphaDash'], ['username' => 'alpha']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violinTests_two-alphaDash'], ['username' => 'alpha']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violin-tests@_three_alphaDash'], ['username' => 'alpha']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['username' => 'violinTests'], ['username' => 'alpha']);
-        $this->assertTrue($this->v->valid());
-    }
-
-    public function testArrayRule()
-    {
-        $this->v->validate(['user' => ['name', '20', 'email@example.com'] ], ['user' => 'array']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['user' => ['name' => 'Violin', 'vcs' => 'git'] ], ['user' => 'array']);
-        $this->assertTrue($this->v->valid());
-    }
-
     public function testBetweenRule()
     {
-        $this->v->validate(['age' => 10], ['age' => 'between(10, 20)']);
-        $this->assertTrue($this->v->valid());
+        $betweenRule = new BetweenRule;
 
-        $this->v->validate(['age' => 1], ['age' => 'between(10, 20)']);
-        $this->assertFalse($this->v->valid());
+        $this->assertFalse(
+            $betweenRule->run('5', [], [10, 15])
+        );
 
-        $this->v->validate(['age' => 1], ['age' => 'between(10, 20)']);
-        $this->assertEquals('age must be between [10, 20].', $this->v->messages()->first('age'));
-    }
+        $this->assertFalse(
+            $betweenRule->run(5, [], [10, 15])
+        );
 
-    public function testBoolRule()
-    {
-        $this->v->validate(['accept' => true], ['accept' => 'bool']);
-        $this->assertTrue($this->v->valid());
+        $this->assertTrue(
+            $betweenRule->run('100', [], [100, 500])
+        );
 
-        $this->v->validate(['accept' => 1], ['accept' => 'bool']);
-        $this->assertFalse($this->v->valid());
-    }
+        $this->assertTrue(
+            $betweenRule->run(499, [], [100, 500])
+        );
 
-    public function testEmailRule()
-    {
-        $this->v->validate(['email' => 'email@example@example.com'], ['email' => 'email']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['email' => '#@%^%#$@#$@#.com'], ['email' => 'email']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['email' => 'plainaddress'], ['email' => 'email']);
-        $this->assertFalse($this->v->valid());
-
-        $this->v->validate(['email' => 'email@example.com'], ['email' => 'email']);
-        $this->assertTrue($this->v->valid());
+        $this->assertTrue(
+            $betweenRule->run('300', [], [100, 500])
+        );
     }
 
     public function testIntRule()
     {
-        $this->v->validate(['number' => 1.32], ['number' => 'int']);
-        $this->assertFalse($this->v->valid());
+        $intRule = new IntRule;
 
-        $this->v->validate(['number' => '1'], ['number' => 'int']);
-        $this->assertTrue($this->v->valid());
+        $this->assertFalse(
+            $intRule->run('two', [], [])
+        );
 
-        $this->v->validate(['number' => 1], ['number' => 'int']);
-        $this->assertTrue($this->v->valid());
+        $this->assertTrue(
+            $intRule->run('2', [], [])
+        );
+
+        $this->assertTrue(
+            $intRule->run(10, [], [])
+        );
     }
 
-    public function testIpRule()
+    public function testNumberRule()
     {
-        $this->v->validate(['ip' => '42.42'], ['ip' => 'ip']);
-        $this->assertFalse($this->v->valid());
+        $numberRule = new NumberRule;
 
-        $this->v->validate(['ip' => '127.0.0.1'], ['ip' => 'ip']);
-        $this->assertTrue($this->v->valid());
+        $this->assertFalse(
+            $numberRule->run('dale', [], [])
+        );
+
+        $this->assertFalse(
+            $numberRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $numberRule->run('three', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run('1', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run('3.14159265359', [], [])
+        );
+
+        $this->assertTrue(
+            $numberRule->run(3.14159265359, [], [])
+        );
     }
 
-    public function testMaxRule()
+    public function testMatchesRule()
     {
-        $this->v->validate(['number' => 101], ['number' => 'max(100)']);
-        $this->assertFalse($this->v->valid());
+        $matchesRule = new MatchesRule;
 
-        $this->v->validate(['number' => 100], ['number' => 'max(100)']);
-        $this->assertTrue($this->v->valid());
+        $this->assertFalse(
+            $matchesRule->run('cats', [
+                'password' => 'cats',
+                'password_again' => 'catz',
+            ], ['password_again'])
+        );
 
-        $this->v->validate(['number' => 10], ['number' => 'max(100)']);
-        $this->assertTrue($this->v->valid());
-    }
-
-    public function testMinRule()
-    {
-        $this->v->validate(['number' => 101], ['number' => 'min(100)']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['number' => 100], ['number' => 'min(100)']);
-        $this->assertTrue($this->v->valid());
-
-        $this->v->validate(['number' => 10], ['number' => 'min(100)']);
-        $this->assertFalse($this->v->valid());
+        $this->assertTrue(
+            $matchesRule->run('cats', [
+                'password' => 'cats',
+                'password_again' => 'cats',
+            ], ['password_again'])
+        );
     }
 
     public function testRequiredRule()
     {
-        $this->v->validate(['name' => ' '], ['name' => 'required']);
-        $this->assertFalse($this->v->valid());
+        $requiredRule = new RequiredRule;
 
-        $this->v->validate(['name' => ''], ['name' => 'required']);
-        $this->assertFalse($this->v->valid());
+        $this->assertFalse(
+            $requiredRule->run('', [], [])
+        );
 
-        $this->v->validate(['name' => 'Violin'], ['name' => 'required']);
-        $this->assertTrue($this->v->valid());
+        $this->assertFalse(
+            $requiredRule->run('   ', [], [])
+        );
+
+        $this->assertFalse(
+            $requiredRule->run(' ', [], [])
+        ); // Contains whitespace character
+
+        $this->assertTrue(
+            $requiredRule->run('cats', [], [])
+        );
+
+        $this->assertTrue(
+            $requiredRule->run('  cats  ', [], [])
+        );
+    }
+
+    public function testAlnumRule()
+    {
+        $alnumRule = new AlnumRule;
+
+        $this->assertFalse(
+            $alnumRule->run('cats_123', [], [])
+        );
+
+        $this->assertFalse(
+            $alnumRule->run('cats-_123', [], [])
+        );
+
+        $this->assertFalse(
+            $alnumRule->run('cats123!', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumRule->run('cats123', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumRule->run('cats', [], [])
+        );
+    }
+
+    public function testAlnumDashRule()
+    {
+        $alnumDashRule = new AlnumDashRule;
+
+        $this->assertFalse(
+            $alnumDashRule->run('cats123!', [], [])
+        );
+
+        $this->assertFalse(
+            $alnumDashRule->run('cats(123)', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumDashRule->run('cats_123', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumDashRule->run('i_love-cats', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumDashRule->run('cat__love', [], [])
+        );
+
+        $this->assertTrue(
+            $alnumDashRule->run('cat--love', [], [])
+        );
+    }
+
+    public function testAlphaRule()
+    {
+        $alphaRule = new AlphaRule;
+
+        $this->assertFalse(
+            $alphaRule->run('cats123', [], [])
+        );
+
+        $this->assertFalse(
+            $alphaRule->run('cats!', [], [])
+        );
+
+        $this->assertFalse(
+            $alphaRule->run('   cats   ', [], [])
+        );
+
+        $this->assertTrue(
+            $alphaRule->run('cats', [], [])
+        );
+    }
+
+    public function testArrayRule()
+    {
+        $arrayRule = new ArrayRule;
+
+        $this->assertFalse(
+            $arrayRule->run('not an array', [], [])
+        );
+
+        $this->assertFalse(
+            $arrayRule->run("['not', 'an', 'array']", [], [])
+        );
+
+        $this->assertTrue(
+            $arrayRule->run(['an', 'array'], [], [])
+        );
+
+        $this->assertTrue(
+            $arrayRule->run([], [], [])
+        );
+    }
+
+    public function testBoolRule()
+    {
+        $boolRule = new BoolRule;
+
+        $this->assertFalse(
+            $boolRule->run('false', [], [])
+        );
+
+        $this->assertFalse(
+            $boolRule->run('true', [], [])
+        );
+
+        $this->assertFalse(
+            $boolRule->run(1, [], [])
+        );
+
+        $this->assertFalse(
+            $boolRule->run(0, [], [])
+        );
+
+        $this->assertTrue(
+            $boolRule->run(true, [], [])
+        );
+
+        $this->assertTrue(
+            $boolRule->run(false, [], [])
+        );
+    }
+
+    public function testEmailRule()
+    {
+        $emailRule = new EmailRule;
+
+        $this->assertFalse(
+            $emailRule->run('ilove@', [], [])
+        );
+
+        $this->assertFalse(
+            $emailRule->run('ilove@cats', [], [])
+        );
+
+        $this->assertTrue(
+            $emailRule->run('ilove@cats.com', [], [])
+        );
+    }
+
+    public function testIpRule()
+    {
+        $ipRule = new IpRule;
+
+        $this->assertFalse(
+            $ipRule->run('127', [], [])
+        );
+
+        $this->assertFalse(
+            $ipRule->run('127.0.0', [], [])
+        );
+
+        $this->assertFalse(
+            $ipRule->run('www.duckduckgo.com', [], [])
+        );
+
+        $this->assertTrue(
+            $ipRule->run('0.0.0.0', [], [])
+        );
+
+        $this->assertTrue(
+            $ipRule->run('127.0.0.1', [], [])
+        );
+
+        $this->assertTrue(
+            $ipRule->run('FE80:0000:0000:0000:0202:B3FF:FE1E:8329', [], [])
+        );
+
+        $this->assertTrue(
+            $ipRule->run('FE80::0202:B3FF:FE1E:8329', [], [])
+        );
+
+        $this->assertTrue(
+            $ipRule->run('::1', [], [])
+        );
+    }
+
+    public function testMaxRuleWithNumbers()
+    {
+        $maxRule = new MaxRule;
+
+        $this->assertFalse(
+            $maxRule->run('100', [], ['10'])
+        );
+
+        $this->assertFalse(
+            $maxRule->run(100, [], ['99'])
+        );
+
+        $this->assertFalse(
+            $maxRule->run(3.14, [], ['3.10'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('50', [], ['100'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run(50, [], ['100'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('5.5', [], ['100'])
+        );
+    }
+
+    public function testMinRuleWithNumbers()
+    {
+        $minRule = new MinRule;
+
+        $this->assertFalse(
+            $minRule->run('10', [], ['100'])
+        );
+
+        $this->assertFalse(
+            $minRule->run(99, [], ['100'])
+        );
+
+        $this->assertFalse(
+            $minRule->run(3.10, [], ['3.14'])
+        );
+
+        $this->assertTrue(
+            $minRule->run('100', [], ['50'])
+        );
+
+        $this->assertTrue(
+            $minRule->run(100, [], ['50'])
+        );
+
+        $this->assertTrue(
+            $minRule->run('100', [], ['5.5'])
+        );
+    }
+
+    public function testMaxRuleWithStrings()
+    {
+        $maxRule = new MaxRule;
+
+        $this->assertFalse(
+            $maxRule->run('william', [], ['5'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('billy', [], ['5'])
+        );
+    }
+
+    public function testMinRuleWithStrings()
+    {
+        $minRule = new MinRule;
+
+        $this->assertFalse(
+            $minRule->run('billy', [], ['10'])
+        );
+
+        $this->assertTrue(
+            $minRule->run('william', [], ['5'])
+        );
     }
 
     public function testUrlRule()
     {
-        $this->v->validate(['url' => 'http://www.example.com/space here.html'], ['url' => 'url']);
-        $this->assertFalse($this->v->valid());
+        $urlRule = new UrlRule;
 
-        $this->v->validate(['url' => 'www.example.com/main.html'], ['url' => 'url']);
-        $this->assertFalse($this->v->valid());
+        $this->assertFalse(
+            $urlRule->run('www.com', [], [])
+        );
 
-        $this->v->validate(['url' => 'http://www.example.com/main.html'], ['url' => 'url']);
-        $this->assertTrue($this->v->valid());
+        $this->assertFalse(
+            $urlRule->run('duckduckgo.com', [], [])
+        );
+
+        $this->assertFalse(
+            $urlRule->run('www.duckduckgo', [], [])
+        );
+
+        $this->assertFalse(
+            $urlRule->run('127.0.0.1', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('http://www.duckduckgo.com', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('http://127.0.0.1', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('ftp://127.0.0.1', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('ssl://codecourse.com', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('ssl://127.0.0.1', [], [])
+        );
+
+        $this->assertTrue(
+            $urlRule->run('http://codecourse.com', [], [])
+        );
+    }
+
+    public function testDateRule()
+    {
+        $dateRule = new DateRule;
+
+        $this->assertFalse(
+            $dateRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $dateRule->run('0000-00-00', [], [])
+        );
+
+        $this->assertFalse(
+            $dateRule->run('40th November 1989', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('16th November 1989', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('1989-11-16', [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run('16-11-1989', [], [])
+        );
+
+        $dateTime = new DateTime('2 days ago');
+
+        $this->assertFalse(
+            $dateRule->run($dateTime->format('x y z'), [], [])
+        );
+
+        $this->assertTrue(
+            $dateRule->run($dateTime->format('d M Y'), [], [])
+        );
+    }
+
+    public function testCheckedRule()
+    {
+        $checkedRule = new CheckedRule;
+
+        $this->assertFalse(
+            $checkedRule->run('', [], [])
+        );
+
+        $this->assertFalse(
+            $checkedRule->run('   ', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('on', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('yes', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run(1, [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('1', [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run(true, [], [])
+        );
+
+        $this->assertTrue(
+            $checkedRule->run('true', [], [])
+        );
+    }
+
+    public function testRegexRule()
+    {
+        $regexRule = new RegexRule;
+
+        $exampleRegex = '/b[aeiou]g/';
+
+        $this->assertFalse(
+            $regexRule->run('banter', [], [$exampleRegex])
+        );
+
+        $this->assertTrue(
+            $regexRule->run('bag', [], [$exampleRegex])
+        );
+
+        $this->assertTrue(
+            $regexRule->run('big', [], [$exampleRegex])
+        );
     }
 }

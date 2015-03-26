@@ -4,10 +4,10 @@ namespace Violin\Rules;
 
 use Violin\Contracts\RuleContract;
 
-class UrlRule implements RuleContract
+class NumberRule implements RuleContract
 {
     public function run($value, $input, $args)
     {
-        return filter_var($value, FILTER_VALIDATE_URL) !== false;
+        return is_numeric($value);
     }
 }

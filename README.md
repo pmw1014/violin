@@ -13,7 +13,7 @@ Install using Composer.
 ```json
 {
     "require": {
-        "alexgarrett/violin": "1.*"
+        "alexgarrett/violin": "2.*"
     }
 }
 ```
@@ -33,10 +33,10 @@ $v->validate([
     'age'   => 'required|int'
 ]);
 
-if($v->valid()) {
-    echo 'Valid!';
+if($v->passes()) {
+    echo 'Validation passed, woo!';
 } else {
-    echo '<pre>', var_dump($v->messages()->all()), '</pre>';
+    echo '<pre>', var_dump($v->errors()->all()), '</pre>';
 }
 ```
 
@@ -45,11 +45,17 @@ if($v->valid()) {
 Adding custom rules is simple. If the closure returns false, the rule fails.
 
 ```php
-$v->addRuleMessage('isBanana', '{field} expects banana, found "{input}" instead.');
+$v->addRuleMessage('isbanana', 'The {field} field expects "banana", found "{value}" instead.');
 
-$v->addRule('isBanana', function($field, $value) {
+$v->addRule('isbanana', function($value, $input, $args) {
     return $value === 'banana';
 });
+
+$v->validate([
+    'fruit' => 'apple'
+], [
+    'fruit' => 'isbanana'
+]);
 ```
 
 ## Adding custom error messages
@@ -67,13 +73,13 @@ $v->addRuleMessage('required', 'You better fill in the {field} field, or else.')
 ```php
 $v->addRuleMessages([
     'required' => 'You better fill in the {field} field, or else.',
-    'int'      => 'The {field} needs to be an integer, but I found {input}.',
+    'int'      => 'The {field} needs to be an integer, but I found {value}.',
 ]);
 ```
 
 ### Adding a field message
 
-Any field messages you add are preferred over any default or custom rule messages.
+Any field messages you add are used before any default or custom rule messages.
 
 ```php
 $v->addFieldMessage('username', 'required', 'You need to enter a username to sign up.');
@@ -93,50 +99,59 @@ $v->addFieldMessages([
 ]);
 ```
 
-### Error output
+### Extending Violin
 
-See `examples/messages.php`.
-
-## Extending the Violin class
-
-You can extend Violin to implement your own validation class and add rules, custom rule messages and custom field messages.
+You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection or language files.
 
 ```php
-class Validator extends Violin\Violin
+class MyValidator extends Violin
 {
     protected $db;
 
-    protected function __construct(Database $db)
+    public function __construct(PDO $db)
     {
-        $this->db = $db; // Some database dependency
-
-        // You can add a custom rule message here if you like, or, you
-        // could add it outside of this validation class when you
-        // make use of your new Validator object.
-        $this->addRuleMessage('usernameDoesNotExist', 'That username is taken');
+        $this->db = $db;
+        
+        // Add rule message for custom rule method.
+        $this->addRuleMessage('uniqueUsername', 'That username is taken.');
     }
-
-    // Prepend your validation rule name with validate_
-    public function validate_usernameDoesNotExist($field, $value)
+    
+    // Custom rule method for checking a unique username in our database.
+    // Just prepend custom rules with validate_
+    public function validate_uniqueUsername($value, $input, $args)
     {
-        if($db->where('username', '=', $value)->count()) {
-            return false;
+        $user = $this->db->prepare("
+            SELECT count(*) as count
+            FROM users
+            WHERE username = :username
+        ");
+
+        $user->execute(['username' => $value]);
+
+        if($user->fetchObject()->count) {
+            return false; // Username exists, so return false.
         }
+
+        return true;
     }
 }
 
-$v = new Validator;
+// A database connection.
+$db = new PDO('mysql:host=127.0.0.1;dbname=website', 'root', 'root');
 
-// ... and so on.
+// Instantiate your custom class with dependencies.
+$v = new MyValidator($db);
+
+$v->validate([
+    'username' => 'billy'
+], [
+    'username' => 'required|uniqueUsername'
+]);
 ```
 
 ## Rules
 
 This list of rules are **in progress**. Of course, you can always contribute to the project if you'd like to add more to the base ruleset.
-
-#### activeUrl
-
-If the URL provided is an active URL using checkdnsrr().
 
 #### alnum
 
@@ -160,7 +175,7 @@ If the value is an array.
 
 #### between(int, int)
 
-Checks if the value is within the intervals defined.
+Checks if the value is within the intervals defined. This check is inclusive, so 5 is between 5 and 10.
 
 #### bool
 
@@ -172,19 +187,25 @@ If the value is a valid email.
 
 #### int
 
-If the value is an integer, including integers within strings. 1 and '1' are both classed as integers.
+If the value is an integer, including numbers within strings. 1 and '1' are both classed as integers.
+
+#### number
+
+If the value is a number, including numbers within strings.
+
+> Numeric strings consist of optional sign, any number of digits, optional decimal part and optional exponential part. Thus +0123.45e6 is a valid numeric value. Hexadecimal (e.g. 0xf4c3b00c), Binary (e.g. 0b10100111001), Octal (e.g. 0777) notation is allowed too but only without sign, decimal and exponential part.
 
 #### ip
 
 If the value is a valid IP address.
 
-#### max(int)
+#### max(int/string)
 
-Rule with parameter. Checks if the value is less or equals than parameter.
+Checks if the value is less than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is less than or equal to the given parameter.
 
-#### min(int)
+#### min(int/string)
 
-Rule with parameter. Checks if the value is greater or equals than parameter.
+Checks if the value is greater than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is greater than or equal to the given parameter.
 
 #### required
 
@@ -194,6 +215,39 @@ If the value is present.
 
 If the value is formatted as a valid URL.
 
+#### matches(field)
+
+Checks if one given input matches the other. For example, checking if *password* matches *password_confirm*.
+
+#### date
+
+If the given input is a valid date.
+
+You can validate human readable dates like '25th October 1961' and instances of `DateTime`. For example:
+
+```php
+$twoDaysAgo = new DateTime('2 days ago');
+$date = $twoDaysAgo->format('d M Y');
+
+$v->validate([
+    'date' => $date
+], [
+    'date' => 'required|date'
+]);
+```
+
+#### checked
+
+If a field has been 'checked' or not, meaning it contains one of the following values: *'yes'*, *'on'*, *'1'*, *1*, *true*, or *'true'*. This can be used for determining if an HTML checkbox has been checked.
+
+#### regex(expression)
+
+If the given input has a match for the regular expression given.
+
 ## Contributing
 
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
+
+### Running tests
+
+Tests are run with phpunit. Run `./vendor/bin/phpunit` to run tests.
