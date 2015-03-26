@@ -10,4 +10,9 @@ class AlphaRule implements RuleContract
     {
         return (bool) preg_match('/^[\pL\pM]+$/u', $value);
     }
+
+    public function error()
+    {
+        return '{field} must be alphabetic.';
+    }
 }

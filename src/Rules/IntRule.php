@@ -10,4 +10,9 @@ class IntRule implements RuleContract
     {
         return is_numeric($value) && (int)$value == $value;
     }
+
+    public function error()
+    {
+        return '{field} must be a number.';
+    }
 }

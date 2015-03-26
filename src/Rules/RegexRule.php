@@ -10,4 +10,9 @@ class RegexRule implements RuleContract
     {
         return (bool) preg_match($args[0], $value);
     }
+
+    public function error()
+    {
+        return '{field} was not in the correct format.';
+    }
 }

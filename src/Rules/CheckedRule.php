@@ -10,4 +10,9 @@ class CheckedRule implements RuleContract
     {
         return in_array($value, ['yes', 'on', '1', 1, true, 'true'], true);
     }
+
+    public function error()
+    {
+        return 'You need to check the {field} field.';
+    }
 }

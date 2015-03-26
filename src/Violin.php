@@ -45,26 +45,7 @@ class Violin implements ValidatorContract
      *
      * @var array
      */
-    protected $ruleMessages = [
-        'required'  => '{field} is required',
-        'int'       => '{field} must be a number',
-        'between'   => '{field} must be between {arg} and {arg:1}.',
-        'matches'   => '{field} must match {arg}.',
-        'alnumDash' => '{field} must be alphanumeric with dashes and underscores permitted.',
-        'alnum'     => '{field} must be alphanumeric.',
-        'alpha'     => '{field} must be alphabetic.',
-        'array'     => '{field} must be an array.',
-        'bool'      => '{field} must be a boolean.',
-        'email'     => '{field} must be a valid email address.',
-        'ip'        => '{field} must be a valid IP address.',
-        'max'       => '{field} must be a maximum of {arg}',
-        'min'       => '{field} must be a minimum of {arg}',
-        'url'       => '{field} must be a valid URL.',
-        'number'    => '{field} must be a number.',
-        'date'      => '{field} must be a valid date.',
-        'checked'   => 'You need to check the {field} field.',
-        'regex'     => '{field} was not in the correct format.'
-    ];
+    protected $ruleMessages = [];
 
     /**
      * Field messages
@@ -219,9 +200,15 @@ class Violin implements ValidatorContract
      */
     protected function fetchMessage($field, $rule)
     {
-        return isset($this->fieldMessages[$field][$rule])
-                ? $this->fieldMessages[$field][$rule]
-                : $this->ruleMessages[$rule];
+        if (isset($this->fieldMessages[$field][$rule])) {
+            return $this->fieldMessages[$field][$rule];
+        }
+
+        if (isset($this->ruleMessages[$rule])) {
+            return $this->ruleMessages[$rule];
+        }
+
+        return $this->usedRules[$rule]->error();
     }
 
     /**

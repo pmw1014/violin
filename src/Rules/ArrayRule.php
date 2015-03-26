@@ -10,4 +10,9 @@ class ArrayRule implements RuleContract
     {
         return is_array($value);
     }
+
+    public function error()
+    {
+        return '{field} must be an array.';
+    }
 }

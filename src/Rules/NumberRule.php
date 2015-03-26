@@ -10,4 +10,9 @@ class NumberRule implements RuleContract
     {
         return is_numeric($value);
     }
+
+    public function error()
+    {
+        return '{field} must be a number.';
+    }
 }

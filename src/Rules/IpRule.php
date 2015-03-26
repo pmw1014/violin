@@ -10,4 +10,9 @@ class IpRule implements RuleContract
     {
         return filter_var($value, FILTER_VALIDATE_IP) !== false;
     }
+
+    public function error()
+    {
+        return '{field} must be a valid IP address.';
+    }
 }
