@@ -55,14 +55,6 @@ class Violin implements ValidatorContract
     protected $fieldMessages = [];
 
     /**
-     * The default format that errors should take, used
-     * for replacing values in messages.
-     *
-     * @var array
-     */
-    public $format = ['{field}', '{value}', '{arg}'];
-
-    /**
      * Kick off the validation using input and rules.
      *
      * @param  array  $input
@@ -217,19 +209,27 @@ class Violin implements ValidatorContract
      */
     protected function replaceMessageFormat($message, array $item)
     {
-        $format = $this->format;
+        $keys = array_keys($item);
 
         if (!empty($item['args'])) {
-            for ($i = 0; $i < count($item['args']); $i++) {
-                $format[] = '{arg:' . ($i + 1) . '}';
-            }
+            $args = $item['args'];
+            
+            $argReplace = array_map(function($i) {
+                return "{arg{$i}}";
+            }, array_keys($args));
+
+            // Replace arguments
+            $message = str_replace($argReplace, $args, $message);
         }
 
-        return str_replace(
-            $format,
-            $this->flattenArray($item),
+        // Replace field and value
+        $message = str_replace(
+            ['{field}', '{value}'],
+            [$item['field'], $item['value']],
             $message
         );
+
+        return $message;
     }
 
     /**
