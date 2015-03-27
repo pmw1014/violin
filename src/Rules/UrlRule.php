@@ -10,4 +10,9 @@ class UrlRule implements RuleContract
     {
         return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
+
+    public function error()
+    {
+        return '{field} must be a valid URL.';
+    }
 }

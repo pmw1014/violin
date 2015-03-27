@@ -10,4 +10,9 @@ class BoolRule implements RuleContract
     {
         return is_bool($value);
     }
+
+    public function error()
+    {
+        return '{field} must be a boolean.';
+    }
 }

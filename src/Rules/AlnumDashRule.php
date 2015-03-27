@@ -10,4 +10,9 @@ class AlnumDashRule implements RuleContract
     {
         return (bool) preg_match('/^[\pL\pM\pN_-]+$/u', $value);
     }
+
+    public function error()
+    {
+        return '{field} must be alphanumeric with dashes and underscores permitted.';
+    }
 }

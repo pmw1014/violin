@@ -16,4 +16,9 @@ class MaxRule implements RuleContract
             return mb_strlen($value) <= (int) $args[0];
         }
     }
+
+    public function error()
+    {
+        return '{field} must be a maximum of {arg}.';
+    }
 }

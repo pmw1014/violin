@@ -12,4 +12,9 @@ class RequiredRule implements RuleContract
 
         return !empty($value);
     }
+
+    public function error()
+    {
+        return '{field} is required.';
+    }
 }

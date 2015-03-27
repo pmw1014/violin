@@ -10,4 +10,9 @@ class AlnumRule implements RuleContract
     {
         return (bool) preg_match('/^[\pL\pM\pN]+$/u', $value);
     }
+
+    public function error()
+    {
+        return '{field} must be alphanumeric.';
+    }
 }

@@ -20,4 +20,9 @@ class DateRule implements RuleContract
 
         return checkdate($date['month'], $date['day'], $date['year']);
     }
+
+    public function error()
+    {
+        return '{field} must be a valid date.';
+    }
 }

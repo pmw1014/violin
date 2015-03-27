@@ -10,4 +10,9 @@ class EmailRule implements RuleContract
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
     }
+
+    public function error()
+    {
+        return '{field} must be a valid email address.';
+    }
 }

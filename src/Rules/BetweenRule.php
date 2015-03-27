@@ -10,4 +10,9 @@ class BetweenRule implements RuleContract
     {
         return ($value >= $args[0] && $value <= $args[1]) ? true : false;
     }
+
+    public function error()
+    {
+        return '{field} must be between {arg} and {arg:1}.';
+    }
 }

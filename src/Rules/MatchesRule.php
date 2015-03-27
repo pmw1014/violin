@@ -10,4 +10,9 @@ class MatchesRule implements RuleContract
     {
         return $value === $input[$args[0]];
     }
+
+    public function error()
+    {
+        return '{field} must match {arg}.';
+    }
 }
