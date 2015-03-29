@@ -5,7 +5,7 @@ use Violin\Violin;
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     protected $v;
-    
+
     public function setUp()
     {
         $this->v = new Violin;
@@ -135,7 +135,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             $errors->get('username'),
             ['We need a username, please.', 'Alpha characters in that username only, please.']
         );
-        
+
         $this->assertEquals(
             $errors->first('email'),
             'How do you expect us to contact you without an email?'
@@ -221,5 +221,31 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertFalse($this->v->passes());
+    }
+
+    public function testValidationWithAliases()
+    {
+        $this->v->addFieldMessages([
+            'username_box' => [
+                'required' => 'We need a username in the {field} field, please.'
+            ]
+        ]);
+
+        $this->v->validate([
+            'username_box|Username' => '',
+            'password' => 'secret'
+        ], [
+            'username_box' => 'required',
+            'password' => 'required|alpha'
+        ]);
+
+        $errors = $this->v->errors();
+
+        $this->assertFalse($this->v->passes());
+        $this->assertTrue($this->v->fails());
+        $this->assertEquals(
+            $errors->first('username_box'),
+            'We need a username in the Username field, please.'
+        );
     }
 }

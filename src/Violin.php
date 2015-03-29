@@ -48,11 +48,18 @@ class Violin implements ValidatorContract
     protected $ruleMessages = [];
 
     /**
-     * Field messages
+     * Field messages.
      *
      * @var array
      */
     protected $fieldMessages = [];
+
+    /**
+     * Field Aliases.
+     *
+     * @var array
+     */
+    protected $fieldAliases = [];
 
     /**
      * Kick off the validation using input and rules.
@@ -65,6 +72,9 @@ class Violin implements ValidatorContract
     public function validate(array $input, array $rules)
     {
         $this->clearErrors();
+        $this->clearFieldAliases();
+
+        $input = $this->extractFieldAliases($input);
 
         $this->input = $input;
 
@@ -116,6 +126,11 @@ class Violin implements ValidatorContract
                 $field = $item['field'];
 
                 $message = $this->fetchMessage($field, $rule);
+
+                // If there is any alias for the current field, swap it.
+                if (isset($this->fieldAliases[$field])) {
+                    $item['field'] = $this->fieldAliases[$field];
+                }
 
                 $messages[$field][] = $this->replaceMessageFormat($message, $item);
             }
@@ -213,7 +228,7 @@ class Violin implements ValidatorContract
 
         if (!empty($item['args'])) {
             $args = $item['args'];
-            
+
             $argReplace = array_map(function($i) {
                 return "{arg{$i}}";
             }, array_keys($args));
@@ -375,5 +390,40 @@ class Violin implements ValidatorContract
         return iterator_to_array(new RecursiveIteratorIterator(
             new RecursiveArrayIterator($args)
         ), false);
+    }
+
+    /**
+     * Extracts field aliases from an input.
+     *
+     * @param  array  $input
+     *
+     * @return array
+     */
+    protected function extractFieldAliases(array $input)
+    {
+        foreach ($input as $field => $fieldRules) {
+            $extraction = explode('|', $field);
+
+            if (isset($extraction[1])) {
+                $updatedField = $extraction[0];
+                $alias        = $extraction[1];
+
+                $this->fieldAliases[$updatedField] = $alias;
+                $input[$updatedField] = $input[$field];
+                unset($input[$field]);
+            }
+        }
+
+        return $input;
+    }
+
+    /**
+     * Clears all field aliases.
+     *
+     * @return void
+     */
+    protected function clearFieldAliases()
+    {
+        $this->fieldAliases = [];
     }
 }
