@@ -26,11 +26,8 @@ use Violin\Violin;
 $v = new Violin;
 
 $v->validate([
-    'name'  => 'billy',
-    'age'   => 20
-], [
-    'name'  => 'required',
-    'age'   => 'required|int'
+    'name'  => ['billy', 'required'],
+    'age'   => [20, 'required|int']
 ]);
 
 if($v->passes()) {
@@ -52,9 +49,7 @@ $v->addRule('isbanana', function($value, $input, $args) {
 });
 
 $v->validate([
-    'fruit' => 'apple'
-], [
-    'fruit' => 'isbanana'
+    'fruit' => ['apple', 'isbanana']
 ]);
 ```
 
@@ -105,9 +100,7 @@ Field Aliases helps you format any error messages without showing weird form nam
 
 ```php
 $v->validate([
-    'username_box|Username' => ''
-], [
-    'username_box' => 'required'
+    'username_box|Username' => ['' => 'required']
 ]);
 
 // Error output: "Username is required."
@@ -156,9 +149,7 @@ $db = new PDO('mysql:host=127.0.0.1;dbname=website', 'root', 'root');
 $v = new MyValidator($db);
 
 $v->validate([
-    'username' => 'billy'
-], [
-    'username' => 'required|uniqueUsername'
+    'username' => ['billy', 'required|uniqueUsername']
 ]);
 ```
 
@@ -243,9 +234,7 @@ $twoDaysAgo = new DateTime('2 days ago');
 $date = $twoDaysAgo->format('d M Y');
 
 $v->validate([
-    'date' => $date
-], [
-    'date' => 'required|date'
+    'date' => [$date, 'required|date']
 ]);
 ```
 

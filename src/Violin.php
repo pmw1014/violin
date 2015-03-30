@@ -64,27 +64,29 @@ class Violin implements ValidatorContract
     /**
      * Kick off the validation using input and rules.
      *
-     * @param  array  $input
-     * @param  array  $rules
+     * @param  array  $data
      *
      * @return void
      */
-    public function validate(array $input, array $rules)
+    public function validate(array $data)
     {
         $this->clearErrors();
         $this->clearFieldAliases();
 
-        $input = $this->extractFieldAliases($input);
+        $data = $this->extractFieldAliases($data);
+
+        $input = $this->extractInput($data);
+        $rules = $this->extractRules($data);
 
         $this->input = $input;
 
-        foreach ($input as $field => $fieldRules) {
+        foreach ($input as $field => $value) {
             $fieldRules = explode('|', $rules[$field]);
 
             foreach ($fieldRules as $rule) {
                 $this->validateAgainstRule(
                     $field,
-                    $input[$field],
+                    $value,
                     $this->getRuleName($rule),
                     $this->getRuleArgs($rule)
                 );
@@ -395,13 +397,13 @@ class Violin implements ValidatorContract
     /**
      * Extracts field aliases from an input.
      *
-     * @param  array  $input
+     * @param  array  $data
      *
      * @return array
      */
-    protected function extractFieldAliases(array $input)
+    protected function extractFieldAliases(array $data)
     {
-        foreach ($input as $field => $fieldRules) {
+        foreach ($data as $field => $fieldRules) {
             $extraction = explode('|', $field);
 
             if (isset($extraction[1])) {
@@ -409,12 +411,12 @@ class Violin implements ValidatorContract
                 $alias        = $extraction[1];
 
                 $this->fieldAliases[$updatedField] = $alias;
-                $input[$updatedField] = $input[$field];
-                unset($input[$field]);
+                $data[$updatedField] = $data[$field];
+                unset($data[$field]);
             }
         }
 
-        return $input;
+        return $data;
     }
 
     /**
@@ -425,5 +427,37 @@ class Violin implements ValidatorContract
     protected function clearFieldAliases()
     {
         $this->fieldAliases = [];
+    }
+
+    /**
+     * Extract the field input from the data array.
+     * @param  array  $data
+     * @return array
+     */
+    protected function extractInput(array $data)
+    {
+        $input = [];
+
+        foreach ($data as $field => $fieldData) {
+            $input[$field] = $fieldData[0];
+        }
+
+        return $input;
+    }
+
+    /**
+     * Extract the field ruleset from the data array.
+     * @param  array  $data
+     * @return array
+     */
+    protected function extractRules(array $data)
+    {
+        $rules = [];
+
+        foreach ($data as $field => $fieldData) {
+            $rules[$field] = $fieldData[1];
+        }
+
+        return $rules;
     }
 }
