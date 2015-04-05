@@ -77,9 +77,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->v->validate([
             'username' => '',
+            'name' => '123',
             'email' => 'notanemail'
         ], [
             'username' => 'required|alpha',
+            'name' => 'alpha|max(30)',
             'email' => 'required|email'
         ]);
 
@@ -87,7 +89,12 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $errors->get('username'),
-            ['This field is required!', 'Only alpha characters please!']
+            ['This field is required!']
+        );
+
+        $this->assertEquals(
+            $errors->first('name'),
+            'Only alpha characters please!'
         );
 
         $this->assertEquals(
@@ -113,8 +120,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->v->addFieldMessages([
             'username' => [
-                'required' => 'We need a username, please.',
-                'alpha' => 'Alpha characters in that username only, please.',
+                'required' => 'We need a username, please.'
             ],
             'email' => [
                 'required' => 'How do you expect us to contact you without an email?'
@@ -133,7 +139,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $errors->get('username'),
-            ['We need a username, please.', 'Alpha characters in that username only, please.']
+            ['We need a username, please.']
         );
         
         $this->assertEquals(
