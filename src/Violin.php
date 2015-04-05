@@ -267,10 +267,10 @@ class Violin implements ValidatorContract
      * don't need to validate an empty value. If the rule to
      * call specifically doesn't allowing skipping, then
      * we don't want skip the rule.
-     * 
+     *
      * @param  array $ruleToCall
      * @param  mixed $value
-     * 
+     *
      * @return null
      */
     protected function canSkipRule($ruleToCall, $value)
