@@ -26,11 +26,8 @@ use Violin\Violin;
 $v = new Violin;
 
 $v->validate([
-    'name'  => 'billy',
-    'age'   => 20
-], [
-    'name'  => 'required',
-    'age'   => 'required|int'
+    'name'  => ['billy', 'required'],
+    'age'   => [20, 'required|int']
 ]);
 
 if($v->passes()) {
@@ -52,9 +49,7 @@ $v->addRule('isbanana', function($value, $input, $args) {
 });
 
 $v->validate([
-    'fruit' => 'apple'
-], [
-    'fruit' => 'isbanana'
+    'fruit' => ['apple', 'isbanana']
 ]);
 ```
 
@@ -99,6 +94,17 @@ $v->addFieldMessages([
 ]);
 ```
 
+### Using Field Aliases
+
+Field Aliases helps you format any error messages without showing weird form names or the need to create a custom error.
+
+```php
+$v->validate([
+    'username_box|Username' => ['' => 'required']
+]);
+
+// Error output: "Username is required."
+```
 ### Extending Violin
 
 You can extend the Violin class to add custom rules, rule messages and field messages. This way, you can keep a tidy class to handle custom validation if you have any dependencies, like a database connection or language files.
@@ -111,11 +117,11 @@ class MyValidator extends Violin
     public function __construct(PDO $db)
     {
         $this->db = $db;
-        
+
         // Add rule message for custom rule method.
         $this->addRuleMessage('uniqueUsername', 'That username is taken.');
     }
-    
+
     // Custom rule method for checking a unique username in our database.
     // Just prepend custom rules with validate_
     public function validate_uniqueUsername($value, $input, $args)
@@ -143,9 +149,7 @@ $db = new PDO('mysql:host=127.0.0.1;dbname=website', 'root', 'root');
 $v = new MyValidator($db);
 
 $v->validate([
-    'username' => 'billy'
-], [
-    'username' => 'required|uniqueUsername'
+    'username' => ['billy', 'required|uniqueUsername']
 ]);
 ```
 
@@ -230,9 +234,7 @@ $twoDaysAgo = new DateTime('2 days ago');
 $date = $twoDaysAgo->format('d M Y');
 
 $v->validate([
-    'date' => $date
-], [
-    'date' => 'required|date'
+    'date' => [$date, 'required|date']
 ]);
 ```
 
