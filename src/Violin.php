@@ -278,7 +278,8 @@ class Violin implements ValidatorContract
         return (
             (!isset($ruleToCall[0]->skipIfEmpty) ||
             $ruleToCall[0]->skipIfEmpty === true) &&
-            empty($value)
+            empty($value) &&
+            !is_array($value)
         );
     }
 
