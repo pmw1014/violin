@@ -19,6 +19,6 @@ class MaxRule implements RuleContract
 
     public function error()
     {
-        return '{field} must be a maximum of {arg}.';
+        return '{field} must be a maximum of {arg0}.';
     }
 }
