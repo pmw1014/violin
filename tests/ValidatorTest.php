@@ -5,7 +5,7 @@ use Violin\Violin;
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
     protected $v;
-    
+
     public function setUp()
     {
         $this->v = new Violin;
@@ -14,17 +14,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testBasicValidValidation()
     {
         $this->v->validate([
-            'first_name' => 'Billy',
-            'last_name' => 'Garrett',
-            'email' => 'billy@codecourse.com',
-            'password' => 'ilovecats',
-            'password_again' => 'ilovecats'
-        ], [
-            'first_name' => 'required|alpha|max(20)',
-            'last_name' => 'required|alpha|max(20)',
-            'email' => 'required|email',
-            'password' => 'required',
-            'password_again' => 'required|matches(password)',
+            'first_name'     => ['Billy', 'required|alpha|max(20)'],
+            'last_name'      => ['Garrett', 'required|alpha|max(20)'],
+            'email'          => ['billy@codecourse.com', 'required|email'],
+            'password'       => ['ilovecats', 'required'],
+            'password_again' => ['ilovecats', 'required|matches(password)']
         ]);
 
         $this->assertTrue($this->v->passes());
@@ -34,17 +28,11 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     public function testBasicInvalidValidation()
     {
         $this->v->validate([
-            'first_name' => 'Billy',
-            'last_name' => '',
-            'email' => 'billy@codecourse',
-            'password' => 'ilovecats',
-            'password_again' => 'ilovecatsanddogs'
-        ], [
-            'first_name' => 'required|alpha|max(20)',
-            'last_name' => 'required|alpha|max(20)',
-            'email' => 'required|email',
-            'password' => 'required',
-            'password_again' => 'required|matches(password)',
+            'first_name'     => ['Billy', 'required|alpha|max(20)'],
+            'last_name'      => ['', 'required|alpha|max(20)'],
+            'email'          => ['billy@codecourse', 'required|email'],
+            'password'       => ['ilovecats', 'required'],
+            'password_again' => ['ilovecatsanddogs' , 'required|matches(password)']
         ]);
 
         $this->assertTrue($this->v->fails());
@@ -56,9 +44,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->v->addRuleMessage('required', 'This field is required!');
 
         $this->v->validate([
-            'username' => ''
-        ], [
-            'username' => 'required'
+            'username' => ['', 'required']
         ]);
 
         $this->assertEquals(
@@ -71,18 +57,14 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     {
         $this->v->addRuleMessages([
             'required' => 'This field is required!',
-            'alpha' => 'Only alpha characters please!',
-            'email' => 'Enter a valid email!'
+            'alpha'    => 'Only alpha characters please!',
+            'email'    => 'Enter a valid email!'
         ]);
 
         $this->v->validate([
-            'username' => '',
-            'name' => '123',
-            'email' => 'notanemail'
-        ], [
-            'username' => 'required|alpha',
-            'name' => 'alpha|max(30)',
-            'email' => 'required|email'
+            'username' => ['', 'required|alpha'],
+            'name' => ['123', 'alpha'],
+            'email'    => ['notanemail', 'required|email']
         ]);
 
         $errors = $this->v->errors();
@@ -108,12 +90,13 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->v->addFieldMessage('username', 'required', 'We need a username, please.');
 
         $this->v->validate([
-            'username' => ''
-        ], [
-            'username' => 'required'
+            'username' => ['', 'required']
         ]);
 
-        $this->assertEquals($this->v->errors()->first('username'), 'We need a username, please.');
+        $this->assertEquals(
+            $this->v->errors()->first('username'),
+            'We need a username, please.'
+        );
     }
 
     public function testFieldMessages()
@@ -128,11 +111,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->v->validate([
-            'username' => '',
-            'email' => ''
-        ], [
-            'username' => 'required|alpha',
-            'email' => 'required|email'
+            'username' => ['', 'required|alpha'],
+            'email' => ['', 'required|email']
         ]);
 
         $errors = $this->v->errors();
@@ -141,7 +121,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             $errors->get('username'),
             ['We need a username, please.']
         );
-        
+
         $this->assertEquals(
             $errors->first('email'),
             'How do you expect us to contact you without an email?'
@@ -155,9 +135,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         });
 
         $this->v->validate([
-            'fruit' => 'apple'
-        ], [
-            'fruit' => 'isbanana'
+            'fruit' => ['apple', 'isbanana']
         ]);
 
         $this->assertFalse($this->v->passes());
@@ -170,9 +148,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         });
 
         $this->v->validate([
-            'fruit' => 'banana'
-        ], [
-            'fruit' => 'isbanana'
+            'fruit' => ['banana', 'isbanana']
         ]);
 
         $this->assertTrue($this->v->passes());
@@ -189,11 +165,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         });
 
         $this->v->validate([
-            'fruit_one' => 'banana',
-            'fruit_two' => 'apple',
-        ], [
-            'fruit_one' => 'isbanana',
-            'fruit_two' => 'isapple',
+            'fruit_one' => ['banana', 'isbanana'],
+            'fruit_two' => ['apple', 'isapple']
         ]);
 
         $this->assertTrue($this->v->passes());
@@ -206,9 +179,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         });
 
         $this->v->validate([
-            'items' => 'seeds'
-        ], [
-            'items' => 'isoneof(seeds, nuts, fruit)'
+            'items' => ['seeds', 'isoneof(seeds, nuts, fruit)']
         ]);
 
         $this->assertTrue($this->v->passes());
@@ -221,11 +192,32 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         });
 
         $this->v->validate([
-            'items' => 'burger'
-        ], [
-            'items' => 'isoneof(seeds, nuts, fruit)'
+            'items' => ['burger', 'isoneof(seeds, nuts, fruit)']
         ]);
 
         $this->assertFalse($this->v->passes());
+    }
+
+    public function testValidationWithAliases()
+    {
+        $this->v->addFieldMessages([
+            'username_box' => [
+                'required' => 'We need a username in the {field} field, please.'
+            ]
+        ]);
+
+        $this->v->validate([
+            'username_box|Username' => ['', 'required'],
+            'password' => ['secret', 'required|alpha']
+        ]);
+
+        $errors = $this->v->errors();
+
+        $this->assertFalse($this->v->passes());
+        $this->assertTrue($this->v->fails());
+        $this->assertEquals(
+            $errors->first('username_box'),
+            'We need a username in the Username field, please.'
+        );
     }
 }
