@@ -16,10 +16,31 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->v->validate([
             'first_name'     => ['Billy', 'required|alpha|max(20)'],
             'last_name'      => ['Garrett', 'required|alpha|max(20)'],
-            'email'          => ['billy@codecourse.com', 'required|email'],
+            'email|Email'    => ['billy@codecourse.com', 'required|email'],
             'password'       => ['ilovecats', 'required'],
             'password_again' => ['ilovecats', 'required|matches(password)']
         ]);
+
+        $this->assertTrue($this->v->passes());
+        $this->assertFalse($this->v->fails());
+
+        $input = [
+            'first_name'  => 'Billy',
+            'last_name'   => 'Garrett',
+            'email|Email' => 'billy@codecourse.com',
+            'password'    => 'ilovecats',
+            'password'    => 'ilovecats'
+        ];
+
+        $rules = [
+            'first_name'     => 'required|alpha|max(20)',
+            'last_name'      => 'required|alpha|max(20)',
+            'email'          => 'required|email',
+            'password'       => 'required',
+            'password_again' => 'required|matches(password)'
+        ];
+
+        $this->v->validate($input, $rules);
 
         $this->assertTrue($this->v->passes());
         $this->assertFalse($this->v->fails());

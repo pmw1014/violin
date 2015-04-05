@@ -6,7 +6,7 @@ use Closure;
 
 interface ValidatorContract
 {
-    public function validate(array $input);
+    public function validate(array $input, $rules = []);
     public function passes();
     public function fails();
     public function errors();

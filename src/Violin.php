@@ -64,23 +64,29 @@ class Violin implements ValidatorContract
     /**
      * Kick off the validation using input and rules.
      *
-     * @param  array  $data
+     * @param  array  $input
+     * @param  array  $rules
      *
-     * @return void
+     * @return this
      */
-    public function validate(array $data)
+    public function validate(array $data, $rules = [])
     {
         $this->clearErrors();
         $this->clearFieldAliases();
 
         $data = $this->extractFieldAliases($data);
 
-        $input = $this->extractInput($data);
-        $rules = $this->extractRules($data);
+        // If the rules array is empty, then it means we are
+        // receiving the rules directly with the input, so we need
+        // to extract the information.
+        if (empty($rules)) {
+            $rules = $this->extractRules($data);
+            $data  = $this->extractInput($data);
+        }
 
-        $this->input = $input;
+        $this->input = $data;
 
-        foreach ($input as $field => $value) {
+        foreach ($data as $field => $value) {
             $fieldRules = explode('|', $rules[$field]);
 
             foreach ($fieldRules as $rule) {
@@ -92,6 +98,8 @@ class Violin implements ValidatorContract
                 );
             }
         }
+
+        return $this;
     }
 
     /**
