@@ -322,27 +322,27 @@ class RulesTest extends PHPUnit_Framework_TestCase
         $maxRule = new MaxRule;
 
         $this->assertFalse(
-            $maxRule->run('100', [], ['10'])
+            $maxRule->run('100', [], ['10', 'number'])
         );
 
         $this->assertFalse(
-            $maxRule->run(100, [], ['99'])
+            $maxRule->run(100, [], ['99', 'number'])
         );
 
         $this->assertFalse(
-            $maxRule->run(3.14, [], ['3.10'])
+            $maxRule->run(3.14, [], ['3.10', 'number'])
         );
 
         $this->assertTrue(
-            $maxRule->run('50', [], ['100'])
+            $maxRule->run('50', [], ['100', 'number'])
         );
 
         $this->assertTrue(
-            $maxRule->run(50, [], ['100'])
+            $maxRule->run(50, [], ['100', 'number'])
         );
 
         $this->assertTrue(
-            $maxRule->run('5.5', [], ['100'])
+            $maxRule->run('5.5', [], ['100', 'number'])
         );
     }
 
@@ -351,27 +351,27 @@ class RulesTest extends PHPUnit_Framework_TestCase
         $minRule = new MinRule;
 
         $this->assertFalse(
-            $minRule->run('10', [], ['100'])
+            $minRule->run('10', [], ['100', 'number'])
         );
 
         $this->assertFalse(
-            $minRule->run(99, [], ['100'])
+            $minRule->run(99, [], ['100', 'number'])
         );
 
         $this->assertFalse(
-            $minRule->run(3.10, [], ['3.14'])
+            $minRule->run(3.10, [], ['3.14', 'number'])
         );
 
         $this->assertTrue(
-            $minRule->run('100', [], ['50'])
+            $minRule->run('100', [], ['50', 'number'])
         );
 
         $this->assertTrue(
-            $minRule->run(100, [], ['50'])
+            $minRule->run(100, [], ['50', 'number'])
         );
 
         $this->assertTrue(
-            $minRule->run('100', [], ['5.5'])
+            $minRule->run('100', [], ['5.5', 'number'])
         );
     }
 
@@ -383,8 +383,20 @@ class RulesTest extends PHPUnit_Framework_TestCase
             $maxRule->run('william', [], ['5'])
         );
 
+        $this->assertFalse(
+            $maxRule->run('100000', [], ['5'])
+        );
+
         $this->assertTrue(
             $maxRule->run('billy', [], ['5'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('100', [], ['5'])
+        );
+
+        $this->assertTrue(
+            $maxRule->run('99999', [], ['5'])
         );
     }
 
@@ -396,8 +408,20 @@ class RulesTest extends PHPUnit_Framework_TestCase
             $minRule->run('billy', [], ['10'])
         );
 
+        $this->assertFalse(
+            $minRule->run('5', [], ['10'])
+        );
+
+        $this->assertFalse(
+            $minRule->run('10', [], ['10'])
+        );
+
         $this->assertTrue(
             $minRule->run('william', [], ['5'])
+        );
+
+        $this->assertTrue(
+            $minRule->run('99999', [], ['5'])
         );
     }
 
