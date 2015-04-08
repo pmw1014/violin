@@ -272,7 +272,7 @@ class Violin implements ValidatorContract
     {
         $ruleToCall = $this->getRuleToCall($rule);
 
-        if (is_array($ruleToCall) && $this->canSkipRule($ruleToCall, $value)) {
+        if ($this->canSkipRule($ruleToCall, $value)) {
             return;
         }
         
@@ -301,8 +301,8 @@ class Violin implements ValidatorContract
     protected function canSkipRule($ruleToCall, $value)
     {
         return (
-            (!isset($ruleToCall[0]->skipIfEmpty) ||
-            $ruleToCall[0]->skipIfEmpty === true) &&
+            (is_array($ruleToCall) &&
+            $ruleToCall[0]->canSkip()) &&
             empty($value) &&
             !is_array($value)
         );

@@ -15,4 +15,9 @@ class AlnumRule implements RuleContract
     {
         return '{field} must be alphanumeric.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

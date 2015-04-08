@@ -15,4 +15,9 @@ class IpRule implements RuleContract
     {
         return '{field} must be a valid IP address.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

@@ -15,4 +15,9 @@ class NumberRule implements RuleContract
     {
         return '{field} must be a number.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

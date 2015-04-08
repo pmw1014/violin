@@ -15,4 +15,9 @@ class MatchesRule implements RuleContract
     {
         return '{field} must match {arg0}.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

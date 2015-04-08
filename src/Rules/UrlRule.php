@@ -15,4 +15,9 @@ class UrlRule implements RuleContract
     {
         return '{field} must be a valid URL.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

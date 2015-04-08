@@ -21,4 +21,9 @@ class MaxRule implements RuleContract
     {
         return '{field} must be a maximum of {arg0}.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

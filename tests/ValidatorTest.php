@@ -241,4 +241,14 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
             'We need a username in the Username field, please.'
         );
     }
+
+    public function testSkippingOtherRulesIfNotRequired()
+    {
+        $this->v->validate([
+            'username' => ['alex', 'required|alpha'],
+            'email' => ['', 'alpha|email']
+        ]);
+
+        $this->assertEmpty($this->v->errors()->all());
+    }
 }
