@@ -203,13 +203,20 @@ If the value is a number, including numbers within strings.
 
 If the value is a valid IP address.
 
-#### max(int/string)
+#### min(int, [number])
 
-Checks if the value is less than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is less than or equal to the given parameter.
+Check if string length is greater than or equal to given `int`. To check the size of a number, pass the optional `number` option.
 
-#### min(int/string)
+```php
+$v->validate([
+    'username' => ['billy', 'required|min(3)|max(20)'],
+    'age' => ['20', 'required|min(18, number)|max(100, number)']
+]);
+```
 
-Checks if the value is greater than or equal to the given parameter. If the value is a string, this will check if the length of the string in characters is greater than or equal to the given parameter.
+#### max(int, [number])
+
+Check if string length is less than or equal to given `int`. To check the size of a number, pass the optional `number` option.
 
 #### required
 
