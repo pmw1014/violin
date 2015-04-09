@@ -13,6 +13,6 @@ class MatchesRule implements RuleContract
 
     public function error()
     {
-        return '{field} must match {arg0}.';
+        return '{field} must match {$0}.';
     }
 }
