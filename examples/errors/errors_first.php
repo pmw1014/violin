@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Violin example. Checking and getting first error.
+ * 
+ * This checks a specific field has an error, and then outputs
+ * the first error that occured for that field. This is most
+ * likely what you'd use in a real life situation within
+ * your HTML form.
+ */
+
 require '../../vendor/autoload.php';
 
 use Violin\Violin;

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Violin example. Errors for a specific field.
+ * 
+ * Simply getting a list of errors for a specific field that
+ * occured while trying to validate the data passed in
+ * against the rules given.
+ */
+
 require '../../vendor/autoload.php';
 
 use Violin\Violin;

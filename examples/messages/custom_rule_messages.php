@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Violin example. Custom rule message.
+ * 
+ * Defining an error message for when a particular rule fails.
+ *
+ * This is the same as addRuleMessage, but allows adding
+ * of multiple rule messages in one go.
+ */
+
 require '../vendor/autoload.php';
 
 use Violin\Violin;

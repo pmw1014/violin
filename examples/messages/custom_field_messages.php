@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Violin example. Custom field messages.
+ * 
+ * Defining an error message for a particular field, when a
+ * particular rule fails.
+ *
+ * This is the same as addFieldMessage, but allows adding
+ * of multiple field messages in one go.
+ */
+
 require '../vendor/autoload.php';
 
 use Violin\Violin;

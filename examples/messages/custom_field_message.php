@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Violin example. Custom field message.
+ * 
+ * Defining an error message for a particular field, when a
+ * particular rule fails.
+ */
+
 require '../vendor/autoload.php';
 
 use Violin\Violin;

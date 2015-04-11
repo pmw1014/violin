@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Violin example. Custom rule.
+ * 
+ * Creating a custom rule using the addRule method, passing in a
+ * closure which should return false if the check has failed,
+ * or true if the check has passed.
+ */
+
 require '../vendor/autoload.php';
 
 use Violin\Violin;

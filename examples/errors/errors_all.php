@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Violin example. All errors.
+ * 
+ * Simply getting a list of errors that occured while trying
+ * to validate the data passed in against the rules given.
+ */
+
 require '../../vendor/autoload.php';
 
 use Violin\Violin;

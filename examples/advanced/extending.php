@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Violin example. Extending.
+ * 
+ * You can extend the Violin class to create your own validator,
+ * making it easier to keep everything in one place, and more
+ * importantly, the ability to pass dependencies into the
+ * class.
+ *
+ * This example checks a specfic value isn't already taken
+ * within a table in your database.
+ */
+
 require '../../vendor/autoload.php';
 
 //-- Validator.php
@@ -49,7 +61,7 @@ class Validator extends Violin
 //-- Any other file
 
 // Some database dependency
-$db = new PDO('mysql:dbname=project;host=localhost;port=33060', 'homestead', 'secret');
+$db = new PDO('mysql:dbname=project;host=localhost', 'root', 'root');
 
 $v = new Validator($db);
 
