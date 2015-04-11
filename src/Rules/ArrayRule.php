@@ -15,4 +15,9 @@ class ArrayRule implements RuleContract
     {
         return '{field} must be an array.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

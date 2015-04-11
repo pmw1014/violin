@@ -272,6 +272,10 @@ class Violin implements ValidatorContract
     {
         $ruleToCall = $this->getRuleToCall($rule);
 
+        if ($this->canSkipRule($ruleToCall, $value)) {
+            return;
+        }
+        
         $passed = call_user_func_array($ruleToCall, [
             $value,
             $this->input,
@@ -281,6 +285,27 @@ class Violin implements ValidatorContract
         if (!$passed) {
             $this->handleError($field, $value, $rule, $args);
         }
+    }
+
+    /**
+     * Method to help skip a rule if a value is empty, since we
+     * don't need to validate an empty value. If the rule to
+     * call specifically doesn't allowing skipping, then
+     * we don't want skip the rule.
+     *
+     * @param  array $ruleToCall
+     * @param  mixed $value
+     *
+     * @return null
+     */
+    protected function canSkipRule($ruleToCall, $value)
+    {
+        return (
+            (is_array($ruleToCall) &&
+            $ruleToCall[0]->canSkip()) &&
+            empty($value) &&
+            !is_array($value)
+        );
     }
 
     /**

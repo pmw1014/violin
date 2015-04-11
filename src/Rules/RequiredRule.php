@@ -17,4 +17,9 @@ class RequiredRule implements RuleContract
     {
         return '{field} is required.';
     }
+
+    public function canSkip()
+    {
+        return false;
+    }
 }

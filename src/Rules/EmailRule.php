@@ -15,4 +15,9 @@ class EmailRule implements RuleContract
     {
         return '{field} must be a valid email address.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

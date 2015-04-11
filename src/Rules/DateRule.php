@@ -25,4 +25,9 @@ class DateRule implements RuleContract
     {
         return '{field} must be a valid date.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

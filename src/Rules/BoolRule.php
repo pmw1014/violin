@@ -15,4 +15,9 @@ class BoolRule implements RuleContract
     {
         return '{field} must be a boolean.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

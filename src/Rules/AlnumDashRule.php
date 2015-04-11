@@ -15,4 +15,9 @@ class AlnumDashRule implements RuleContract
     {
         return '{field} must be alphanumeric with dashes and underscores permitted.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

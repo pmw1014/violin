@@ -15,4 +15,9 @@ class AlphaRule implements RuleContract
     {
         return '{field} must be alphabetic.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

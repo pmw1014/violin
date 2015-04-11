@@ -21,4 +21,9 @@ class MinRule implements RuleContract
     {
         return '{field} must be a minimum of {arg0}.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

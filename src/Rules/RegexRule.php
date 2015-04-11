@@ -15,4 +15,9 @@ class RegexRule implements RuleContract
     {
         return '{field} was not in the correct format.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }

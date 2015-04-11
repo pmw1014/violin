@@ -15,4 +15,9 @@ class CheckedRule implements RuleContract
     {
         return 'You need to check the {field} field.';
     }
+
+    public function canSkip()
+    {
+        return true;
+    }
 }
