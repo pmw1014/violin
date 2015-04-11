@@ -302,6 +302,7 @@ class Violin implements ValidatorContract
     {
         return (
             (is_array($ruleToCall) &&
+            method_exists($ruleToCall[0], 'canSkip') &&
             $ruleToCall[0]->canSkip()) &&
             empty($value) &&
             !is_array($value)
