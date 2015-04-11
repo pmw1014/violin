@@ -74,6 +74,24 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testReplaceMessageFormatOnError()
+    {
+        $this->v->addRule('testRule', function($value, $input, $args) {
+            return false;
+        });
+
+        $this->v->addRuleMessage('testRule', 'We got {$#} arguments: {$*}.');
+
+        $this->v->validate([
+            'age' => [0, 'testRule(1, 2, 3)']
+        ]);
+
+        $this->assertEquals(
+            $this->v->errors()->first(),
+            'We got 3 arguments: 1, 2, 3.'
+        );
+    }
+
     public function testRuleMessages()
     {
         $this->v->addRuleMessages([

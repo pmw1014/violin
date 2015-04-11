@@ -19,7 +19,7 @@ class MaxRule implements RuleContract
 
     public function error()
     {
-        return '{field} must be a maximum of {arg0}.';
+        return '{field} must be a maximum of {$0}.';
     }
 
     public function canSkip()

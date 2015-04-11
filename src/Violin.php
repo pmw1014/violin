@@ -119,7 +119,7 @@ class Violin implements ValidatorContract
      */
     public function fails()
     {
-        return !empty($this->errors);
+        return ! $this->passes();
     }
 
     /**
@@ -240,8 +240,16 @@ class Violin implements ValidatorContract
             $args = $item['args'];
 
             $argReplace = array_map(function($i) {
-                return "{arg{$i}}";
+                return "{\${$i}}";
             }, array_keys($args));
+
+            // Number of arguments
+            $args[] = count($item['args']);
+            $argReplace[] = '{$#}';
+
+            // All arguments
+            $args[] = implode(', ', $item['args']);
+            $argReplace[] = '{$*}';
 
             // Replace arguments
             $message = str_replace($argReplace, $args, $message);
@@ -481,6 +489,7 @@ class Violin implements ValidatorContract
 
     /**
      * Extract the field ruleset from the data array.
+     *
      * @param  array  $data
      * @return array
      */
