@@ -17,7 +17,7 @@ use Violin\Violin;
 
 $v = new Violin;
 
-$v->addRuleMessage('startsWith', 'The {field} must start with "{arg0}".');
+$v->addRuleMessage('startsWith', 'The {field} must start with "{$0}".');
 
 $v->addRule('startsWith', function($value, $input, $args) {
     $value = trim($value);
