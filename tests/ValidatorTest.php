@@ -269,4 +269,49 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEmpty($this->v->errors()->all());
     }
+
+    public function testBeforeCallbackOnValidation()
+    {
+        $this->v->before(function($v) {
+            $this->assertEquals($v->getInput()['user'], 'Billy');
+        });
+
+        $this->v->validate([
+            'user' => ['Billy', 'required|alpha|max(5)']
+        ]);
+
+        $this->assertTrue($this->v->passes());
+    }
+
+    public function testAfterCallbackOnValidation()
+    {
+        $alphaMessage = 'The {field} needs letters!';
+        $maxMessage   = 'You need to have less than {$0} characters.';
+
+        $this->v->after(function($v) use ($maxMessage) {
+            if (! $v->errors()->isEmpty()) {
+                $v->addFieldMessage('user', 'max', $maxMessage);
+            }
+        });
+
+        $this->v->validate([
+            'user' => ['12131', 'required|alpha|max(3)']
+        ])->after(function($v) use ($alphaMessage) {
+            if (! $v->errors()->isEmpty()) {
+                $v->addFieldMessage('user', 'alpha', $alphaMessage);
+            }
+        });
+
+
+        $this->assertFalse($this->v->passes());
+
+        $this->assertEquals(
+            $this->v->errors()->all('user')[0],
+            'The user needs letters!'
+        );
+        $this->assertEquals(
+            $this->v->errors()->all('user')[1],
+            'You need to have less than 3 characters.'
+        );
+    }
 }

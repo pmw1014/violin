@@ -62,6 +62,20 @@ class Violin implements ValidatorContract
     protected $fieldAliases = [];
 
     /**
+     * The before registered callbacks.
+     *
+     * @var array
+     */
+    protected $before = [];
+
+    /**
+     * The after registered callbacks.
+     *
+     * @var array
+     */
+    protected $after = [];
+
+    /**
      * Kick off the validation using input and rules.
      *
      * @param  array  $input
@@ -86,6 +100,11 @@ class Violin implements ValidatorContract
 
         $this->input = $data;
 
+        // Loop through all of the before callbacks and execute them.
+        foreach ($this->before as $before) {
+            call_user_func_array($before, [ $this ]);
+        }
+
         foreach ($data as $field => $value) {
             $fieldRules = explode('|', $rules[$field]);
 
@@ -102,6 +121,25 @@ class Violin implements ValidatorContract
         return $this;
     }
 
+    public function before(Closure $closure)
+    {
+        $this->before[] = $closure;
+
+        return $this;
+    }
+
+    /**
+     * Register an after callback.
+     * @param  Closure $closure
+     * @return this
+     */
+    public function after(Closure $closure)
+    {
+        $this->after[] = $closure;
+
+        return $this;
+    }
+
     /**
      * Checks if validation has passed.
      *
@@ -109,6 +147,11 @@ class Violin implements ValidatorContract
      */
     public function passes()
     {
+        // Loop through all of the after callbacks and execute them.
+        foreach ($this->after as $after) {
+            call_user_func_array($after, [ $this ]);
+        }
+
         return empty($this->errors);
     }
 
@@ -283,7 +326,7 @@ class Violin implements ValidatorContract
         if ($this->canSkipRule($ruleToCall, $value)) {
             return;
         }
-        
+
         $passed = call_user_func_array($ruleToCall, [
             $value,
             $this->input,
@@ -344,6 +387,16 @@ class Violin implements ValidatorContract
             'value' => $value,
             'args' => $args,
         ];
+    }
+
+    /**
+     * Gets the received input.
+     *
+     * @return array
+     */
+    public function getInput()
+    {
+        return $this->input;
     }
 
     /**
