@@ -1,4 +1,4 @@
-# violin
+# Violin
 
 [![Build Status](https://travis-ci.org/alexgarrett/violin.svg?branch=master)](https://travis-ci.org/alexgarrett/violin)
 
@@ -108,13 +108,13 @@ $v->validate([
 
 ### Callbacks
 
-Violin allows you to attach callbacks to be run **before** or **after** after any validation. This might be useful if you need to do some further validation, or maybe raising an event.
-You can add as many **before** and **after** callbacks as you want, and you can also use Violin within them.
+Violin allows you to attach callbacks to be run **before** or **after** any validation. This might be useful if you need to do some further validation, or maybe raise an event.
+You can add as many **before** and **after** callbacks as you want, and you can also use the current Violin instance within them.
 
 Examples:
 
 ```php
-$v->before(function($violin){
+$v->before(function($violin) {
     // This will happen before the validation..
 });
 ```
