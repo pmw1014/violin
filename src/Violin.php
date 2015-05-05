@@ -109,12 +109,19 @@ class Violin implements ValidatorContract
             $fieldRules = explode('|', $rules[$field]);
 
             foreach ($fieldRules as $rule) {
-                $this->validateAgainstRule(
-                    $field,
-                    $value,
-                    $this->getRuleName($rule),
-                    $this->getRuleArgs($rule)
-                );
+                $continue = $this->validateAgainstRule(
+                                $field,
+                                $value,
+                                $this->getRuleName($rule),
+                                $this->getRuleArgs($rule)
+                            );
+
+                // If the rule hasn't passed and it isn't skippable, then we
+                // don't need to validate the rest of the rules in the current
+                // field.
+                if ( ! $continue) {
+                    break;
+                }
             }
         }
 
@@ -323,10 +330,6 @@ class Violin implements ValidatorContract
     {
         $ruleToCall = $this->getRuleToCall($rule);
 
-        if ($this->canSkipRule($ruleToCall, $value)) {
-            return;
-        }
-
         $passed = call_user_func_array($ruleToCall, [
             $value,
             $this->input,
@@ -334,8 +337,14 @@ class Violin implements ValidatorContract
         ]);
 
         if (!$passed) {
+            // If the rule didn't pass the validation, we will handle the error,
+            // and we check if we need to skip the next rules.
             $this->handleError($field, $value, $rule, $args);
+
+            return $this->canSkipRule($ruleToCall, $value);
         }
+
+        return true;
     }
 
     /**
@@ -354,7 +363,7 @@ class Violin implements ValidatorContract
         return (
             (is_array($ruleToCall) &&
             method_exists($ruleToCall[0], 'canSkip') &&
-            $ruleToCall[0]->canSkip()) &&
+            $ruleToCall[0]->canSkip()) ||
             empty($value) &&
             !is_array($value)
         );
