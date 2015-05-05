@@ -110,16 +110,16 @@ class Violin implements ValidatorContract
 
             foreach ($fieldRules as $rule) {
                 $continue = $this->validateAgainstRule(
-                                $field,
-                                $value,
-                                $this->getRuleName($rule),
-                                $this->getRuleArgs($rule)
-                            );
+                    $field,
+                    $value,
+                    $this->getRuleName($rule),
+                    $this->getRuleArgs($rule)
+                );
 
                 // If the rule hasn't passed and it isn't skippable, then we
                 // don't need to validate the rest of the rules in the current
                 // field.
-                if ( ! $continue) {
+                if (! $continue) {
                     break;
                 }
             }
