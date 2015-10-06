@@ -1,6 +1,6 @@
 # Violin
 
-[![Build Status](https://travis-ci.org/alexgarrett/violin.svg?branch=master)](https://travis-ci.org/alexgarrett/violin)
+[![Build Status](https://travis-ci.org/alexgarrett/violin.svg?branch=master)](https://travis-ci.org/alexgarrett/violin) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alexgarrett/violin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Violin is an easy to use, highly customisable PHP validator.
 
