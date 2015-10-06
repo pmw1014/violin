@@ -169,10 +169,6 @@ If the value is alphanumeric. Dashes and underscores are permitted.
 
 If the value is alphabetic letters only.
 
-#### alphaDash
-
-If the value is alphabetic letters only. Dashes and underscores are permitted.
-
 #### array
 
 If the value is an array.
