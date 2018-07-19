@@ -304,6 +304,8 @@ class Violin implements ValidatorContract
             // Replace arguments
             $message = str_replace($argReplace, $args, $message);
         }
+        
+        $item['value'] = is_scalar($item['value']) ? $item['value'] : json_encode($item['value']);
 
         // Replace field and value
         $message = str_replace(
