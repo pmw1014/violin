@@ -1,9 +1,9 @@
 {
-	"name": "pmw1014/violinn",
+	"name": "pmw1014/violin",
 	"type": "library",
 	"description": "Violin is an easy to use, highly customisable PHP validator.",
 	"keywords": ["validation"],
-	"homepage": "https://github.com/pmw1014/violinn",
+	"homepage": "https://github.com/pmw1014/violin",
 	"license": "MIT",
 	"authors": [
 		{
